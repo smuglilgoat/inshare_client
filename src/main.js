@@ -14,7 +14,12 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 window.axios = axios;
 axios.defaults.baseURL = 'http://127.0.0.1:3333';
 Vue.use(BootstrapVue);
-Vue.use(VeeValidate);
+Vue.use(VeeValidate, {
+	// This is the default
+	inject: true,
+	// Important to name this something other than 'fields'
+	fieldsBagName: 'veeFields'
+})
 new Vue({
 	router,
 	store,
