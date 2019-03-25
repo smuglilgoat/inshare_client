@@ -3,56 +3,58 @@
     <b-container>
       <b-row>
         <b-col>
+          
           <h1>Inscrivez-vous !</h1>
           <Alert :type="alert.type" :message="alert.message" v-if="alert.message"/>
-          <b-form @submit.prevent="onSubmit">
-            <b-form-group id="inputUsername" label="Nom d'utilisateur" label-for="usernameInput">
+          <b-form @submit.prevent="inscription">
+            <b-form-group label="Nom d'utilisateur">
               <b-form-input
                 id="usernameInput"
                 type="text"
-                v-model="form.username"
-                v-validate="{ required: true, min:6 }"
-                :state="validateState('form.username')"
+                name="username"
+                v-model="user.username"
+                v-validate="{ required: true}"
+                :state="(submitted && errors.has('username')) ? 'invalid' : 'null'"
                 aria-describedby="usernameInputFeedback"
                 placeholder="Entrez votre nom d'utilisateur"
               />
 
               <b-form-invalid-feedback
                 id="usernameInputFeedback"
-              >Ceci est un champ obligatoire. Votre not d'utilisateur doit au moins contenir 6 charactères.</b-form-invalid-feedback>
+              >Ceci est un champ obligatoire. Votre nom d'utilisateur doit au moins contenir 6 charactères.</b-form-invalid-feedback>
             </b-form-group>
 
-            <b-form-group id="inputEmail" label="Email" label-for="emailInput">
+            <b-form-group label="Email">
               <b-form-input
                 id="emailInput"
                 type="email"
-                v-model="form.email"
-                v-validate="{ required: true }"
-                :state="validateState('form.email')"
+                name="email"
+                v-model="user.email"
+                v-validate="{ required: true, email: true }"
+                :state="(submitted && errors.has('email')) ? 'invalid' : 'null'"
                 aria-describedby="emailInputFeedback"
                 placeholder="Entrez votre email"
               />
-
               <b-form-invalid-feedback id="emailInputFeedback">Ceci est un champ obligatoire.</b-form-invalid-feedback>
             </b-form-group>
 
-            <b-form-group id="inputPass" label="Mot de Passe" label-for="passInput">
+            <b-form-group label="Mot de Passe">
               <b-form-input
-                id="passInput"
+                id="passwordInput"
                 type="password"
-                v-model="form.password"
-                v-validate="{ required: true, min:6 }"
-                :state="validateState('form.password')"
+                name="password"
+                v-model="user.password"
+                v-validate="{ required: true, min: 6 }"
+                :state="(submitted && errors.has('password')) ? 'invalid' : 'null'"
                 aria-describedby="passInputFeedback"
                 placeholder="Entrez votre mot de passe"
               />
-
               <b-form-invalid-feedback
                 id="passInputFeedback"
               >Ceci est un champ obligatoire. Votre mot de passe doit au moins contenir 6 charactères.</b-form-invalid-feedback>
             </b-form-group>
 
-            <b-button type="submit" variant="primary" :disabled="errors.any()">Envoyer</b-button>
+            <b-button type="submit" variant="primary">Envoyer</b-button>
           </b-form>
         </b-col>
       </b-row>
@@ -70,25 +72,36 @@ export default {
   },
   data() {
     return {
-      form: {},
+      user: {
+        username: "",
+        email: "",
+        password: ""
+      },
       alert: {
         message: "",
         type: ""
-      }
+      },
+      submitted: false
     };
   },
   methods: {
-    onSubmit() {
+    verifyUsername(username) {},
+    inscription() {
       // Form submit logic
+      this.submitted = true;
+      this.$validator.validate().then(valid => {
+        if (valid) {
+          this.alert.type = "success";
+          this.alert.message =
+            "YATA ! It's working Hmihmi-kun (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ ✧ﾟ･: *ヽ(◕ヮ◕ヽ)";
+        }
+      });
+      this.restFields();
     },
-    validateState(ref) {
-      if (
-        this.veeFields[ref] &&
-        (this.veeFields[ref].dirty || this.veeFields[ref].validated)
-      ) {
-        return !this.errors.has(ref);
-      }
-      return null;
+    restFields() {
+      (this.user.username = ""),
+        (this.user.email = ""),
+        (this.user.password = "");
     }
   }
 };
