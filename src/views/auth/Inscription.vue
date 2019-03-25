@@ -3,7 +3,6 @@
     <b-container>
       <b-row>
         <b-col>
-          
           <h1>Inscrivez-vous !</h1>
           <Alert :type="alert.type" :message="alert.message" v-if="alert.message"/>
           <b-form @submit.prevent="inscription">
@@ -84,6 +83,11 @@ export default {
       submitted: false
     };
   },
+  beforeRouteEnter(to, from, next) {
+    const token = localStorage.getItem("auth-token");
+
+    return token ? next("/") : next();
+  },
   methods: {
     verifyUsername(username) {},
     inscription() {
@@ -91,12 +95,28 @@ export default {
       this.submitted = true;
       this.$validator.validate().then(valid => {
         if (valid) {
-          this.alert.type = "success";
-          this.alert.message =
-            "YATA ! It's working Hmihmi-kun (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ ✧ﾟ･: *ヽ(◕ヮ◕ヽ)";
+          axios
+            .post("/auth/inscription", {
+              username: this.user.username,
+              email: this.user.email,
+              password: this.user.password
+            })
+            .then(response => {
+              // save token in localstorage
+              localStorage.setItem("auth-token", response.data.data.token);
+
+              // redirect to user home
+              this.$router.push("/");
+            })
+            .catch(error => {
+              // display error notification
+              this.alert = Object.assign({}, this.alert, {
+                message: error.response.data.message,
+                type: error.response.data.status
+              });
+            });
         }
       });
-      this.restFields();
     },
     restFields() {
       (this.user.username = ""),
