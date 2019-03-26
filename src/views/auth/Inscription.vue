@@ -84,12 +84,11 @@ export default {
     };
   },
   beforeRouteEnter(to, from, next) {
-    const token = localStorage.getItem("auth-token");
+    const token = localStorage.getItem("authToken");
 
     return token ? next("/") : next();
   },
   methods: {
-    verifyUsername(username) {},
     inscription() {
       // Form submit logic
       this.submitted = true;
@@ -103,12 +102,13 @@ export default {
             })
             .then(response => {
               // save token in localstorage
-              localStorage.setItem("auth-token", response.data.data.token);
+              localStorage.setItem("authToken", response.data.data.token);
 
               // redirect to user home
               this.$router.push("/");
             })
             .catch(error => {
+              localStorage.removeItem("authToken");
               // display error notification
               this.alert = Object.assign({}, this.alert, {
                 message: error.response.data.message,
@@ -117,11 +117,6 @@ export default {
             });
         }
       });
-    },
-    restFields() {
-      (this.user.username = ""),
-        (this.user.email = ""),
-        (this.user.password = "");
     }
   }
 };

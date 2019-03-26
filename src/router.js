@@ -23,6 +23,11 @@ export default new Router({
 			path: '/auth/inscription',
 			name: 'inscription',
 			component: () => import('./views/auth/Inscription.vue')
+		},
+		{
+			path: '/auth/connexion',
+			name: 'connexion',
+			component: () => import('./views/auth/Connexion.vue')
 		}
 	]
 });

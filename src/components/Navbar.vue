@@ -10,14 +10,10 @@
       <b-collapse is-nav id="nav_collapse">
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item-dropdown right>
-            <!-- Using button-content slot -->
-            <template slot="button-content">
-              <i class="fas fa-user"></i>
-            </template>
-            <b-dropdown-item to="/about">About</b-dropdown-item>
-            <b-dropdown-item to="/auth/inscription">Inscription</b-dropdown-item>
-          </b-nav-item-dropdown>
+          <b-nav-item to="/about">About</b-nav-item>
+          <b-nav-item to="/auth/inscription" v-if="!isConnected">Inscription</b-nav-item>
+          <b-nav-item to="/auth/connexion" v-if="!isConnected">Connexion</b-nav-item>
+          <b-nav-item @click="logout" v-if="isConnected">Logout</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -26,7 +22,33 @@
 
 <script>
 export default {
-  name: "Navrbar"
+  name: "Navrbar",
+  data() {
+    return {
+      token: ""
+    };
+  },
+  watch: {
+    token(newToken) {
+      this.token = localStorage.authToken ? localStorage.authToken : "";
+    }
+  },
+  mounted() {
+    if (localStorage.authToken) {
+      this.token = localStorage.authToken;
+    }
+  },
+  computed: {
+    isConnected() {
+      return !this.token == "";
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem("authToken");
+      this.$router.push("/");
+    }
+  }
 };
 </script>
 
