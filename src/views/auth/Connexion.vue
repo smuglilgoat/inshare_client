@@ -12,7 +12,7 @@
                 type="email"
                 name="email"
                 :value="loginEmail"
-                @change="setLoginEmail"
+                @input="setLoginEmail"
                 placeholder="Entrez votre email"
               />
             </b-form-group>
@@ -22,10 +22,11 @@
                 type="password"
                 name="password"
                 :value="loginPassword"
-                @change="setLoginPassword"
+                @input="setLoginPassword"
                 placeholder="Entrez votre mot de passe"
               />
             </b-form-group>
+
             <b-button type="submit" variant="primary">Envoyer</b-button>
           </b-form>
         </b-col>
@@ -50,11 +51,6 @@ export default {
       "loginErrorMessage",
       "loginErrorType"
     ])
-  },
-  beforeRouteEnter(to, from, next) {
-    const token = localStorage.getItem("authToken");
-
-    return token ? next("/") : next();
   },
   methods: {
     ...mapMutations("auth", [

@@ -84,11 +84,6 @@ export default {
       "registerErrorType"
     ])
   },
-  beforeRouteEnter(to, from, next) {
-    const token = localStorage.getItem("authToken");
-
-    return token ? next("/") : next();
-  },
   methods: {
     ...mapMutations("auth", [
       "setRegisterUsername",

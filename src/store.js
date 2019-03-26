@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import router from '@/router';
+import http from '@/http';
 
 Vue.use(Vuex);
 
@@ -23,13 +24,12 @@ export default new Vuex.Store({
 			actions: {
 				logout({ commit }) {
 					commit('setToken', null);
-					localStorage.removeItem('authToken');
 					router.push('/');
 				},
 				register({ commit, state }) {
 					commit('setRegisterErrorMessage', null);
 					commit('setRegisterErrorType', null);
-					return axios
+					return http()
 						.post('/auth/inscription', {
 							username: state.registerUsername,
 							email: state.registerEmail,
@@ -37,12 +37,13 @@ export default new Vuex.Store({
 						})
 						.then(({ data }) => {
 							// save token in localstorage
-							localStorage.setItem('authToken', data.token);
 							commit('setToken', data.token);
+							commit('setRegisterUsername', '');
+							commit('setRegisterEmail', '');
+							commit('setRegisterPassword', '');
 							router.push('/');
 						})
 						.catch(() => {
-							localStorage.removeItem('authToken');
 							commit('setRegisterErrorMessage', "Une erreur s'est produite, réessayer plus tard");
 							commit('setRegisterErrorType', 'danger');
 						});
@@ -50,20 +51,20 @@ export default new Vuex.Store({
 				login({ commit, state }) {
 					commit('setLoginErrorMessage', null);
 					commit('setLoginErrorType', null);
-					return axios
+					return http()
 						.post('/auth/connexion', {
 							email: state.loginEmail,
 							password: state.loginPassword
 						})
 						.then(({ data }) => {
 							// save token in localstorage
-							localStorage.setItem('authToken', data.token);
 							commit('setToken', data.token);
+							commit('setLoginEmail', '');
+							commit('setLoginPassword', '');
 							// redirect to user home
 							router.push('/');
 						})
 						.catch(() => {
-							localStorage.removeItem('authToken');
 							commit('setLoginErrorMessage', "Une erreur s'est produite, réessayer plus tard");
 							commit('setLoginErrorType', 'danger');
 						});
