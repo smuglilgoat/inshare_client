@@ -4,14 +4,15 @@
       <b-row>
         <b-col>
           <h1>Connectez-vous !</h1>
-          <Alert :type="alert.type" :message="alert.message" v-if="alert.message"/>
+          <Alert :type="loginErrorType" :message="loginErrorMessage" v-if="loginErrorMessage"/>
           <b-form @submit.prevent="login">
             <b-form-group label="Email">
               <b-form-input
                 id="emailInput"
                 type="email"
                 name="email"
-                v-model="email"
+                :value="loginEmail"
+                @change="setLoginEmail"
                 placeholder="Entrez votre email"
               />
             </b-form-group>
@@ -20,7 +21,8 @@
                 id="passwordInput"
                 type="password"
                 name="password"
-                v-model="password"
+                :value="loginPassword"
+                @change="setLoginPassword"
                 placeholder="Entrez votre mot de passe"
               />
             </b-form-group>
@@ -34,22 +36,20 @@
 
 <script>
 import Alert from "@/components/Alert.vue";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "Connexion",
   components: {
     Alert
   },
-  data() {
-    return {
-      email: "",
-      password: "",
-      alert: {
-        message: "",
-        type: ""
-      },
-      submitted: false
-    };
+  computed: {
+    ...mapState("auth", [
+      "loginEmail",
+      "loginPassword",
+      "loginErrorMessage",
+      "loginErrorType"
+    ])
   },
   beforeRouteEnter(to, from, next) {
     const token = localStorage.getItem("authToken");
@@ -57,30 +57,12 @@ export default {
     return token ? next("/") : next();
   },
   methods: {
-    login() {
-      axios
-        .post("/auth/connexion", {
-          email: this.email,
-          password: this.password
-        })
-        .then(response => {
-          // save token in localstorage
-          localStorage.setItem("authToken", response.data.data.token);
-
-          // redirect to user home
-          this.$router.push("/");
-        })
-        .catch(error => {
-          // clear form inputs
-          this.email = this.password = "";
-
-          // display error notification
-          this.alert = Object.assign({}, this.alert, {
-            message: error.response.data.message,
-            type: error.response.data.status
-          });
-        });
-    }
+    ...mapMutations("auth", [
+      "setLoginUsername",
+      "setLoginEmail",
+      "setLoginPassword"
+    ]),
+    ...mapActions("auth", ["login"])
   }
 };
 </script>

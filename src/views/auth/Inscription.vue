@@ -4,16 +4,19 @@
       <b-row>
         <b-col>
           <h1>Inscrivez-vous !</h1>
-          <Alert :type="alert.type" :message="alert.message" v-if="alert.message"/>
-          <b-form @submit.prevent="inscription">
+          <Alert
+            :type="registerErrorType"
+            :message="registerErrorMessage"
+            v-if="registerErrorMessage"
+          />
+          <b-form @submit.prevent="register">
             <b-form-group label="Nom d'utilisateur">
               <b-form-input
                 id="usernameInput"
                 type="text"
                 name="username"
-                v-model="user.username"
-                v-validate="{ required: true}"
-                :state="(submitted && errors.has('username')) ? 'invalid' : 'null'"
+                :value="registerUsername"
+                @change="setRegisterUsername"
                 aria-describedby="usernameInputFeedback"
                 placeholder="Entrez votre nom d'utilisateur"
               />
@@ -22,15 +25,13 @@
                 id="usernameInputFeedback"
               >Ceci est un champ obligatoire. Votre nom d'utilisateur doit au moins contenir 6 charactères.</b-form-invalid-feedback>
             </b-form-group>
-
             <b-form-group label="Email">
               <b-form-input
                 id="emailInput"
                 type="email"
                 name="email"
-                v-model="user.email"
-                v-validate="{ required: true, email: true }"
-                :state="(submitted && errors.has('email')) ? 'invalid' : 'null'"
+                :value="registerEmail"
+                @change="setRegisterEmail"
                 aria-describedby="emailInputFeedback"
                 placeholder="Entrez votre email"
               />
@@ -42,9 +43,8 @@
                 id="passwordInput"
                 type="password"
                 name="password"
-                v-model="user.password"
-                v-validate="{ required: true, min: 6 }"
-                :state="(submitted && errors.has('password')) ? 'invalid' : 'null'"
+                :value="registerPassword"
+                @change="setRegisterPassword"
                 aria-describedby="passInputFeedback"
                 placeholder="Entrez votre mot de passe"
               />
@@ -63,6 +63,7 @@
 
 <script>
 import Alert from "@/components/Alert.vue";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "Inscription",
@@ -71,17 +72,17 @@ export default {
   },
   data() {
     return {
-      user: {
-        username: "",
-        email: "",
-        password: ""
-      },
-      alert: {
-        message: "",
-        type: ""
-      },
       submitted: false
     };
+  },
+  computed: {
+    ...mapState("auth", [
+      "registerUsername",
+      "registerEmail",
+      "registerPassword",
+      "registerErrorMessage",
+      "registerErrorType"
+    ])
   },
   beforeRouteEnter(to, from, next) {
     const token = localStorage.getItem("authToken");
@@ -89,35 +90,12 @@ export default {
     return token ? next("/") : next();
   },
   methods: {
-    inscription() {
-      // Form submit logic
-      this.submitted = true;
-      this.$validator.validate().then(valid => {
-        if (valid) {
-          axios
-            .post("/auth/inscription", {
-              username: this.user.username,
-              email: this.user.email,
-              password: this.user.password
-            })
-            .then(response => {
-              // save token in localstorage
-              localStorage.setItem("authToken", response.data.data.token);
-
-              // redirect to user home
-              this.$router.push("/");
-            })
-            .catch(error => {
-              localStorage.removeItem("authToken");
-              // display error notification
-              this.alert = Object.assign({}, this.alert, {
-                message: error.response.data.message,
-                type: error.response.data.status
-              });
-            });
-        }
-      });
-    }
+    ...mapMutations("auth", [
+      "setRegisterUsername",
+      "setRegisterEmail",
+      "setRegisterPassword"
+    ]),
+    ...mapActions("auth", ["register"])
   }
 };
 </script>

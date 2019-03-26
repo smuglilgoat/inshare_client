@@ -11,9 +11,9 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-item to="/about">About</b-nav-item>
-          <b-nav-item to="/auth/inscription" v-if="!isConnected">Inscription</b-nav-item>
-          <b-nav-item to="/auth/connexion" v-if="!isConnected">Connexion</b-nav-item>
-          <b-nav-item @click="logout" v-if="isConnected">Logout</b-nav-item>
+          <b-nav-item to="/auth/inscription" v-if="!isLoggedIn">Inscription</b-nav-item>
+          <b-nav-item to="/auth/connexion" v-if="!isLoggedIn">Connexion</b-nav-item>
+          <b-nav-item v-if="isLoggedIn" @click="logout">Logout</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -21,33 +21,15 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "Navrbar",
-  data() {
-    return {
-      token: ""
-    };
-  },
-  watch: {
-    token(newToken) {
-      this.token = localStorage.authToken ? localStorage.authToken : "";
-    }
-  },
-  mounted() {
-    if (localStorage.authToken) {
-      this.token = localStorage.authToken;
-    }
-  },
   computed: {
-    isConnected() {
-      return !this.token == "";
-    }
+    ...mapGetters("auth", ["isLoggedIn"])
   },
   methods: {
-    logout() {
-      localStorage.removeItem("authToken");
-      this.$router.push("/");
-    }
+    ...mapActions("auth", ["logout"])
   }
 };
 </script>
