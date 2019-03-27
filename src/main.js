@@ -5,6 +5,15 @@ import BootstrapVue from 'bootstrap-vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import axios from 'axios';
+
+window.axios = axios;
+axios.defaults.baseURL = 'http://127.0.0.1:3333';
+axios.defaults.timeout = 5000;
+const token = localStorage.getItem('token');
+if (token) {
+	axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 
 Vue.config.productionTip = false;
 

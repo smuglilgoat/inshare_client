@@ -70,10 +70,10 @@ export default {
   components: {
     Alert
   },
-  data() {
-    return {
-      submitted: false
-    };
+  beforeRouteEnter(to, from, next) {
+    const token = localStorage.getItem("token");
+
+    return token ? next("/") : next();
   },
   computed: {
     ...mapState("auth", [

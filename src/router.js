@@ -12,17 +12,12 @@ export default new Router({
 			component: Home
 		},
 		{
-			path: '/about',
-			name: 'about',
+			path: '/auth/inscription',
+			name: 'inscription',
 			// route level code-splitting
 			// this generates a separate chunk (about.[hash].js) for this route
 			// which is lazy-loaded when the route is visited.
-			component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-		},
-		{
-			path: '/auth/inscription',
-			name: 'inscription',
-			component: () => import('./views/auth/Inscription.vue')
+			component: () => import(/* webpackChunkName: "about" */ './views/auth/Inscription.vue')
 		},
 		{
 			path: '/auth/connexion',

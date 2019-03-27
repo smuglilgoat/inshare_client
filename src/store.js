@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import router from '@/router';
-import http from '@/http';
 
 Vue.use(Vuex);
 
@@ -19,17 +18,19 @@ export default new Vuex.Store({
 				loginPassword: '',
 				loginErrorMessage: null,
 				loginErrorType: null,
-				token: null
+				token: localStorage.getItem('token') || null
 			},
 			actions: {
 				logout({ commit }) {
 					commit('setToken', null);
+					localStorage.removeItem('token');
+					delete axios.defaults.headers.common['Authorization'];
 					router.push('/');
 				},
 				register({ commit, state }) {
 					commit('setRegisterErrorMessage', null);
 					commit('setRegisterErrorType', null);
-					return http()
+					return axios
 						.post('/auth/inscription', {
 							username: state.registerUsername,
 							email: state.registerEmail,
@@ -38,12 +39,12 @@ export default new Vuex.Store({
 						.then(({ data }) => {
 							// save token in localstorage
 							commit('setToken', data.token);
-							commit('setRegisterUsername', '');
-							commit('setRegisterEmail', '');
-							commit('setRegisterPassword', '');
+							localStorage.setItem('token', data.token);
+							axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
 							router.push('/');
 						})
 						.catch(() => {
+							localStorage.removeItem('token');
 							commit('setRegisterErrorMessage', "Une erreur s'est produite, réessayer plus tard");
 							commit('setRegisterErrorType', 'danger');
 						});
@@ -51,7 +52,7 @@ export default new Vuex.Store({
 				login({ commit, state }) {
 					commit('setLoginErrorMessage', null);
 					commit('setLoginErrorType', null);
-					return http()
+					return axios
 						.post('/auth/connexion', {
 							email: state.loginEmail,
 							password: state.loginPassword
@@ -59,12 +60,13 @@ export default new Vuex.Store({
 						.then(({ data }) => {
 							// save token in localstorage
 							commit('setToken', data.token);
-							commit('setLoginEmail', '');
-							commit('setLoginPassword', '');
+							localStorage.setItem('token', data.token);
+							axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
 							// redirect to user home
 							router.push('/');
 						})
 						.catch(() => {
+							localStorage.removeItem('token');
 							commit('setLoginErrorMessage', "Une erreur s'est produite, réessayer plus tard");
 							commit('setLoginErrorType', 'danger');
 						});
