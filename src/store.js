@@ -31,7 +31,7 @@ export default new Vuex.Store({
 					commit('setRegisterErrorMessage', null);
 					commit('setRegisterErrorType', null);
 					return axios
-						.post('/auth/inscription', {
+						.get('/auth/inscription', {
 							username: state.registerUsername,
 							email: state.registerEmail,
 							password: state.registerPassword
