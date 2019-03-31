@@ -23,9 +23,9 @@
             </template>
             <b-dropdown-item to="/auth/inscription" v-if="!isLoggedIn">Inscription</b-dropdown-item>
             <b-dropdown-item to="/auth/connexion" v-if="!isLoggedIn">Connexion</b-dropdown-item>
-            <b-dropdown-item v-if="isLoggedIn" to="/compte/profile">Profile</b-dropdown-item>
+            <b-dropdown-item v-if="isLoggedIn" to="/profile/moi">Profile</b-dropdown-item>
             <b-dropdown-item v-if="isLoggedIn" to="/compte/parametres">Parametres</b-dropdown-item>
-            <b-dropdown-divider/>
+            <b-dropdown-divider v-if="isLoggedIn"/>
             <b-dropdown-item v-if="isLoggedIn" @click="logout">Deconnexion</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>

@@ -31,7 +31,7 @@ export default new Vuex.Store({
 					commit('setRegisterErrorMessage', null);
 					commit('setRegisterErrorType', null);
 					return axios
-						.get('/auth/inscription', {
+						.post('/auth/inscription', {
 							username: state.registerUsername,
 							email: state.registerEmail,
 							password: state.registerPassword
@@ -41,6 +41,9 @@ export default new Vuex.Store({
 							commit('setToken', data.token);
 							localStorage.setItem('token', data.token);
 							axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+							commit('setRegisterUsername', '');
+							commit('setRegisterEmail', '');
+							commit('setRegisterPassword', '');
 							router.push('/');
 						})
 						.catch(() => {
@@ -63,6 +66,8 @@ export default new Vuex.Store({
 							localStorage.setItem('token', data.token);
 							axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
 							// redirect to user home
+							commit('setLoginEmail', '');
+							commit('setLoginPassword', '');
 							router.push('/');
 						})
 						.catch(() => {

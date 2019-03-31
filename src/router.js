@@ -25,9 +25,9 @@ export default new Router({
 			component: () => import('./views/auth/Connexion.vue')
 		},
 		{
-			path: '/compte/profile',
-			name: 'profile',
-			component: () => import('./views/compte/Profile.vue')
+			path: '/profile/moi',
+			name: 'moi',
+			component: () => import('./views/profile/Moi.vue')
 		},
 		{
 			path: '/compte/parametres',
