@@ -4,7 +4,11 @@
       <b-card-text>
         <b-container fluid>
           <b-row>
-            <b-col></b-col>
+            <b-col>
+              Avatar:
+              <br>
+              <img :src="user.avatar" alt>
+            </b-col>
             <b-col>
               <b-row>
                 Username:

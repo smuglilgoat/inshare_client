@@ -12,6 +12,11 @@
             <ModifMdp/>
           </b-card-text>
         </b-tab>
+        <b-tab title="Changer votre avatar">
+          <b-card-text>
+            <ModifAvatar/>
+          </b-card-text>
+        </b-tab>
       </b-tabs>
     </b-card>
   </div>
@@ -20,11 +25,13 @@
 <script>
 import ModifInfo from "@/components/ModifInfo";
 import ModifMdp from "@/components/ModifMdp";
+import ModifAvatar from "@/components/ModifAvatar";
 
 export default {
   components: {
     ModifInfo,
-    ModifMdp
+    ModifMdp,
+    ModifAvatar
   },
   beforeRouteEnter(to, from, next) {
     const token = localStorage.getItem("token");
