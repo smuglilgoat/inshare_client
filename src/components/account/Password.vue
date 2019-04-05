@@ -31,7 +31,7 @@
 import Alert from "@/components/Alert";
 
 export default {
-  name: "ModifMdp",
+  name: "Password",
   components: {
     Alert
   },
@@ -53,7 +53,7 @@ export default {
 
       axios
         .put(
-          "/compte/majmdp",
+          "/update/password",
           {
             password: this.password,
             newpassword: this.newpassword

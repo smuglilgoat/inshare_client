@@ -18,7 +18,7 @@
 import Alert from "@/components/Alert";
 
 export default {
-  name: "ModifAvatar",
+  name: "Avatar",
   components: {
     Alert
   },
@@ -32,9 +32,6 @@ export default {
     };
   },
   methods: {
-    // handleFileUpload() {
-    //   this.file = this.$refs.file.files[0];
-    // },
     updateAvatar() {
       alert.type = "";
       alert.message = "";
@@ -43,12 +40,8 @@ export default {
       let formData = new FormData();
 
       formData.append("file", this.file);
-
-      /*
-          Make the request to the POST /single-file URL
-        */
       axios
-        .post("/uploads/avatar", formData, {
+        .post("/update/avatar", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`

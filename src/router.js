@@ -12,27 +12,32 @@ export default new Router({
 			component: Home
 		},
 		{
-			path: '/auth/inscription',
-			name: 'inscription',
+			path: '/auth/register',
+			name: 'register',
 			// route level code-splitting
 			// this generates a separate chunk (about.[hash].js) for this route
 			// which is lazy-loaded when the route is visited.
-			component: () => import(/* webpackChunkName: "about" */ './views/auth/Inscription.vue')
+			component: () => import(/* webpackChunkName: "about" */ './views/auth/Register.vue')
 		},
 		{
-			path: '/auth/connexion',
-			name: 'connexion',
-			component: () => import('./views/auth/Connexion.vue')
+			path: '/auth/login',
+			name: 'login',
+			component: () => import('./views/auth/Login.vue')
 		},
 		{
-			path: '/profile/moi',
-			name: 'moi',
-			component: () => import('./views/profile/Moi.vue')
+			path: '/profile',
+			name: 'personal',
+			component: () => import('./views/profile/Personal.vue')
 		},
 		{
-			path: '/compte/parametres',
-			name: 'parametres',
-			component: () => import('./views/compte/Parametres.vue')
+			path: '/account',
+			name: 'account',
+			component: () => import('./views/managment/Account.vue')
+		},
+		{
+			path: '/admin',
+			name: 'administration',
+			component: () => import('./views/managment/Admin.vue')
 		}
 	]
 });

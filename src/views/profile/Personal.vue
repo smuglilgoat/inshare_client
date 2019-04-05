@@ -3,10 +3,10 @@
     <b-container fluid>
       <b-row>
         <b-col cols="8">
-          <InfoProfile :user="user"/>
+          <Info :user="user"/>
         </b-col>
         <b-col cols="4" v-if="user.role == 'Simple'">
-          <DemandeRole :user="user"/>
+          <Role :user="user"/>
         </b-col>
       </b-row>
     </b-container>
@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import InfoProfile from "@/components/InfoProfile";
-import DemandeRole from "@/components/DemandeRole";
+import Info from "@/components/profile/Info";
+import Role from "@/components/profile/Role";
 
 export default {
   data() {
@@ -24,15 +24,15 @@ export default {
     };
   },
   components: {
-    InfoProfile,
-    DemandeRole
+    Info,
+    Role
   },
   beforeRouteEnter(to, from, next) {
     const token = localStorage.getItem("token");
 
-    return token ? next() : next("/auth/connexion");
+    return token ? next() : next("/auth/login");
   },
-  created() {
+  mounted() {
     this.fetchAuthenticatedUser();
   },
   methods: {
@@ -40,7 +40,7 @@ export default {
       const token = localStorage.getItem("token");
 
       axios
-        .get("/profile/moi", {
+        .get("/auth/user", {
           headers: {
             Authorization: `Bearer ${token}`
           }

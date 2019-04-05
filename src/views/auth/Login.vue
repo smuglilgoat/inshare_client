@@ -40,7 +40,7 @@ import Alert from "@/components/Alert.vue";
 import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
-  name: "Connexion",
+  name: "Login",
   components: {
     Alert
   },

@@ -66,7 +66,7 @@ import Alert from "@/components/Alert.vue";
 import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
-  name: "Inscription",
+  name: "Register",
   components: {
     Alert
   },

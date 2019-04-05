@@ -7,7 +7,7 @@
             <b-col>
               Avatar:
               <br>
-              <img :src="user.avatar" alt>
+              <b-img thumbnail fluid :src="user.avatar" width="150px" rounded="circle"></b-img>
             </b-col>
             <b-col>
               <b-row>
@@ -64,7 +64,7 @@
 
 <script>
 export default {
-  name: "InfoProfile",
+  name: "Info",
   props: {
     user: {}
   }

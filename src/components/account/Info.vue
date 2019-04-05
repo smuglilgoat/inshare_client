@@ -35,7 +35,7 @@
 import Alert from "@/components/Alert";
 
 export default {
-  name: "ModifInfo",
+  name: "Info",
   components: {
     Alert
   },
@@ -59,7 +59,7 @@ export default {
 
       axios
         .put(
-          "/compte/majinfo",
+          "/update/ids",
           {
             username: this.user.username
           },
@@ -90,7 +90,7 @@ export default {
 
       axios
         .put(
-          "/compte/majinfo",
+          "/update/ids",
           {
             email: this.user.email
           },
