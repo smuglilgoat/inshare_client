@@ -10,6 +10,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.15",
+    "lodash.isempty": "^4.4.0",
     "vee-validate": "^2.2.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.1",
