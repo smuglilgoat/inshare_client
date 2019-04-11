@@ -17,7 +17,7 @@
           <br>Date d'Echeance:
           <span class="font-weight-bold">
             <br>
-            {{certificat.dateecheance}}
+            {{certificat.dateecheance | dateFormat}}
           </span>
         </span>
 
@@ -50,11 +50,16 @@
 
 <script>
 import Alert from "@/components/Alert";
-
+var moment = require("moment");
 export default {
   name: "Role",
   components: {
     Alert
+  },
+  filters: {
+    dateFormat: function(value) {
+      return moment(value).format("YYYY-MM-DD");
+    }
   },
   data() {
     return {

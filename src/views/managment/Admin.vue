@@ -2,17 +2,17 @@
   <div>
     <b-card no-body class="ml-2 mr-2">
       <b-tabs card>
-        <b-tab title="Certificats" >
+        <b-tab title="Certificats" active>
           <b-card-text>
             <Certificats/>
           </b-card-text>
         </b-tab>
-        <b-tab title="Utilisateurs" active>
+        <b-tab title="Utilisateurs">
           <b-card-text>
             <Users/>
           </b-card-text>
         </b-tab>
-        <b-tab title="Documents" >
+        <b-tab title="Documents">
           <b-card-text></b-card-text>
         </b-tab>
       </b-tabs>

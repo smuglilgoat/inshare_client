@@ -1,7 +1,25 @@
 <template>
   <div>
     <h1>Utilisateurs</h1>
-    <b-table striped hover small responsive :items="users" :fields="fields"></b-table>
+
+    <b-table
+      id="usersTable"
+      striped
+      hover
+      small
+      responsive
+      :items="users"
+      :fields="fields"
+      :per-page="perPage"
+      :current-page="currentPage"
+    ></b-table>
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      aria-controls="usersTable"
+      align="fill"
+    ></b-pagination>
   </div>
 </template>
 
@@ -10,6 +28,9 @@ export default {
   name: "Users",
   data() {
     return {
+      perPage: 5,
+      currentPage: 1,
+      rows: 0,
       fields: {
         id: {
           label: "ID",
@@ -58,6 +79,7 @@ export default {
         })
         .then(({ data }) => {
           this.users = data;
+          this.rows = this.users.length;
         });
     }
   }

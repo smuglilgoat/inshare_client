@@ -19,7 +19,8 @@
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown right>
             <template slot="button-content">
-              <i class="fas fa-user"></i>
+              <i class="far fa-id-card" v-if="isLoggedIn"></i>
+              <i class="fas fa-user" v-else></i>
             </template>
             <b-dropdown-item to="/auth/register" v-if="!isLoggedIn">Inscription</b-dropdown-item>
             <b-dropdown-item to="/auth/login" v-if="!isLoggedIn">Connexion</b-dropdown-item>
