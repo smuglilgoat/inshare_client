@@ -39,11 +39,13 @@
         <b-col cols="4">
           <b-card>
             <b-card-text v-if="selected != null">
-              ID:
-              <span class="font-weight-bold">{{selected[0].id}}</span>
-              <br>Utilisateur:
-              <span class="font-weight-bold">{{users.get(selected[0].user_id)}}</span>
-              <br>Date d'Echenace:
+              <dl class="row">
+                <dt class="col-sm-5 font-weight-normal">ID</dt>
+                <dd class="col-sm-7 font-weight-bold">{{selected[0].id}}</dd>
+                <dt class="col-sm-5 font-weight-normal">Utilisateur</dt>
+                <dd class="col-sm-7 font-weight-bold">{{users.get(selected[0].user_id)}}</dd>
+              </dl>
+              <hr>Date d'échenace:
               <datepicker
                 :language="fr"
                 bootstrap-styling
@@ -58,6 +60,7 @@
             </b-card-text>
 
             <b-button
+              block
               variant="primary"
               class="mr-2"
               v-if="selected != null"
@@ -65,7 +68,7 @@
             >
               <i class="fas fa-folder-plus"></i>
             </b-button>
-            <b-button variant="danger" v-if="selected != null" @click="refuseCertificat">
+            <b-button block variant="danger" v-if="selected != null" @click="refuseCertificat">
               <i class="fas fa-folder-minus"></i>
             </b-button>
           </b-card>
@@ -73,36 +76,73 @@
       </b-row>
     </b-container>
     <hr>
+    <!--                                            CERTIFICAT VALIDES                                                         -->
     <h1>Certificats validés</h1>
-    <b-table
-      id="certifTableValide"
-      striped
-      hover
-      small
-      responsive
-      :items="certificatsValide"
-      :fields="fieldsValide"
-      :per-page="perPageValide"
-      :current-page="currentPageValide"
-      :busy="isBusyValide"
-    >
-      <div slot="table-busy" class="text-center text-danger my-2">
-        <b-spinner class="align-middle"></b-spinner>
-        <strong class="ml-2">Chargement...</strong>
-      </div>
-      <template slot="user_id" slot-scope="data">{{users.get(data.value)}}</template>
-      <template slot="preuve" slot-scope="data">
-        <a :href="`${data.value}`" target="_blank">Cliquez</a>
-      </template>
-      <template slot="dateecheance" slot-scope="data">{{data.value}}</template>
-    </b-table>
-    <b-pagination
-      v-model="currentPageValide"
-      :total-rows="rowsValide"
-      :per-page="perPageValide"
-      aria-controls="certifTableValide"
-      align="fill"
-    ></b-pagination>
+    <b-container fluid>
+      <b-row>
+        <b-col cols="8">
+          <b-table
+            id="certifTableValide"
+            selectable
+            select-mode="single"
+            @row-selected="rowSelectedValide"
+            striped
+            hover
+            small
+            responsive
+            :items="certificatsValide"
+            :fields="fieldsValide"
+            :per-page="perPageValide"
+            :current-page="currentPageValide"
+            :busy="isBusyValide"
+          >
+            <div slot="table-busy" class="text-center text-danger my-2">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong class="ml-2">Chargement...</strong>
+            </div>
+            <template slot="user_id" slot-scope="data">{{users.get(data.value)}}</template>
+            <template slot="preuve" slot-scope="data">
+              <a :href="`${data.value}`" target="_blank">Cliquez</a>
+            </template>
+            <template slot="dateecheance" slot-scope="data">{{dateFormat(data.value)}}</template>
+          </b-table>
+          <b-pagination
+            v-model="currentPageValide"
+            :total-rows="rowsValide"
+            :per-page="perPageValide"
+            aria-controls="certifTableValide"
+            align="fill"
+          ></b-pagination>
+        </b-col>
+        <b-col cols="4">
+          <b-card>
+            <b-card-text v-if="selectedValide != null">
+              <dl class="row">
+                <dt class="col-sm-5 font-weight-normal">ID</dt>
+                <dd class="col-sm-7 font-weight-bold">{{selectedValide[0].id}}</dd>
+                <dt class="col-sm-5 font-weight-normal">Utilisateur</dt>
+                <dd class="col-sm-7 font-weight-bold">{{users.get(selectedValide[0].user_id)}}</dd>
+                <dt class="col-sm-5 font-weight-normal">Date d'échenace</dt>
+                <dd class="col-sm-7 font-weight-bold">{{dateFormat(selectedValide[0].dateecheance)}}</dd>
+              </dl>
+            </b-card-text>
+            <b-card-text v-else style=" opacity: 0.6">
+              <b-spinner type="grow" class="mr-2 align-middle"></b-spinner>
+              <strong>Selectionnez un certificat...</strong>
+            </b-card-text>
+
+            <b-button
+              block
+              variant="danger"
+              v-if="selectedValide != null"
+              @click="deleteCertificat"
+            >
+              <i class="fas fa-folder-minus"></i>
+            </b-button>
+          </b-card>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -121,6 +161,7 @@ export default {
       fr: fr,
       date: new Date(),
       selected: null,
+      selectedValide: null,
       isBusy: true,
       isBusyValide: true,
       perPage: 5,
@@ -175,10 +216,7 @@ export default {
         {
           key: "dateecheance",
           label: "Date d'écheance",
-          sortable: true,
-          formatter: (value, key, item) => {
-            return moment(item.value).format("YYYY-MM-DD");
-          }
+          sortable: true
         }
       ],
       certificatsAttente: [],
@@ -197,10 +235,26 @@ export default {
     rowSelected(items) {
       this.selected = items;
     },
+    rowSelectedValide(items) {
+      this.selectedValide = items;
+    },
+    deleteCertificat() {
+      axios
+        .delete("/delete/certificat", {
+          data: {
+            user_id: this.selectedValide[0].user_id
+          }
+        })
+        .then(() => {
+          this.$router.go();
+        });
+    },
     refuseCertificat() {
       axios
-        .delete("/update/certificat", {
-          data: { user_id: this.selected[0].user_id }
+        .delete("/delete/certificat", {
+          data: {
+            user_id: this.selected[0].user_id
+          }
         })
         .then(() => {
           this.$router.go();

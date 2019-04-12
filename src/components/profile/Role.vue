@@ -93,7 +93,7 @@ export default {
       formData.append("file", this.upload.file);
       formData.append("type", this.upload.type);
       axios
-        .post("/update/certificat", formData, {
+        .post("/create/certificat", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`
