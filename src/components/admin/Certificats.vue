@@ -220,7 +220,7 @@ export default {
       const token = localStorage.getItem("token");
 
       axios
-        .get("/view/certificats", {
+        .get("/read/certificats", {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -241,7 +241,7 @@ export default {
       const token = localStorage.getItem("token");
 
       axios
-        .get("/view/users", {
+        .get("/read/users", {
           headers: {
             Authorization: `Bearer ${token}`
           }

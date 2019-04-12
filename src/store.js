@@ -31,7 +31,7 @@ export default new Vuex.Store({
 					commit('setRegisterErrorMessage', null);
 					commit('setRegisterErrorType', null);
 					return axios
-						.post('/auth/register', {
+						.post('/create/register', {
 							username: state.registerUsername,
 							email: state.registerEmail,
 							password: state.registerPassword
@@ -56,7 +56,7 @@ export default new Vuex.Store({
 					commit('setLoginErrorMessage', null);
 					commit('setLoginErrorType', null);
 					return axios
-						.post('/auth/login', {
+						.post('/read/login', {
 							email: state.loginEmail,
 							password: state.loginPassword
 						})
