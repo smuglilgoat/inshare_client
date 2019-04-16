@@ -1,56 +1,108 @@
 <template>
-  <div>
-    <b-card bg-variant="light" header="Validez votre statue" class="text-center shadow-sm">
-      <b-card-text
-        v-if="Object.entries(certificat).length != 0 || certificat.constructor != Object"
-      >
-        Voici les informations de votre statue:
-        <span v-if="certificat.valide === 1">
-          <br>Validité:
-          <br>
-          <span class="font-weight-bold badge badge-success text-wrap">Valide</span>
-          <br>Type:
-          <span class="font-weight-bold">
-            <br>
-            {{certificat.typec}}
-          </span>
-          <br>Date d'Echeance:
-          <span class="font-weight-bold">
-            <br>
-            {{certificat.dateecheance | dateFormat}}
-          </span>
-        </span>
+  <v-card>
+    <v-toolbar card flat dense color="info">
+      <v-toolbar-title>Certification</v-toolbar-title>
+    </v-toolbar>
+    <v-container fluid grid-list-md text-xs-center fill-height class="pa-0">
+      <v-layout row wrap align-center>
+        <v-flex grow d-flex>
+          <v-card flat>
+            <v-card-text
+              v-if="Object.entries(certificat).length != 0 || certificat.constructor != Object"
+            >
+              Voici les informations de votre statue:
+              <v-container
+                fluid
+                grid-list-md
+                text-xs-center
+                v-if="certificat.valide === 1"
+                class="pa-0"
+              >
+                <v-layout row wrap>
+                  <v-flex>
+                    <v-layout column align-start justify-start fill-height>
+                      <v-flex>Validite</v-flex>
+                      <v-flex>Type</v-flex>
+                      <v-flex>Date d'écheance</v-flex>
+                    </v-layout>
+                  </v-flex>
+                  <v-flex>
+                    <v-layout column align-end justify-start fill-height>
+                      <v-flex>
+                        <v-chip color="success" text-color="white">Valide</v-chip>
+                      </v-flex>
+                      <v-flex>
+                        <v-chip>{{certificat.typec}}</v-chip>
+                      </v-flex>
+                      <v-flex>
+                        <v-chip>{{certificat.dateecheance | dateFormat}}</v-chip>
+                      </v-flex>
+                    </v-layout>
+                  </v-flex>
+                </v-layout>
+              </v-container>
 
-        <span v-if="certificat.valide === 0">
-          <br>Validité:
-          <br>
-          <span class="font-weight-bold badge badge-danger text-wrap">En cours de modération</span>
-        </span>
-      </b-card-text>
-      <b-card-text v-else>
-        Vous etes un simple utilisateur, pour obtenir le statut d'Etudiant ou d'Enseignant veuillez nous envoyer une piece d'identite prouvant votre statue:
-        <br>
-        <b-form @submit.prevent="uploadPreuve">
-          <b-form-select v-model="upload.type" :options="options" size="sm" class="mt-3"></b-form-select>
-          <b-form-file
-            class="mt-2"
-            v-model="upload.file"
-            :state="Boolean(upload.file)"
-            placeholder="Choisissez un fichier..."
-            drop-placeholder="Glissez un fichier..."
-            accept=".jpg, .png, .jpeg"
-          ></b-form-file>
-          <b-button type="submit" variant="primary" class="mt-2">Envoyer</b-button>
-        </b-form>
-        <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
-      </b-card-text>
-    </b-card>
-  </div>
+              <v-container
+                fluid
+                grid-list-md
+                text-xs-center
+                v-if="certificat.valide === 0"
+                class="pa-0"
+              >
+                <v-layout row wrap>
+                  <v-flex>
+                    <v-layout column align-start justify-start fill-height>
+                      <v-flex>Validite</v-flex>
+                    </v-layout>
+                  </v-flex>
+                  <v-flex>
+                    <v-layout column align-end justify-start fill-height>
+                      <v-flex>
+                        <v-chip color="warning">En cours de modération</v-chip>
+                      </v-flex>
+                    </v-layout>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-text v-else>
+              Vous etes un simple utilisateur, pour obtenir le statut d'Etudiant ou d'Enseignant veuillez nous envoyer une piece d'identite prouvant votre statue:
+              <br>
+              <v-form>
+                <v-select
+                  prepend-icon="insert_drive_file"
+                  :items="items"
+                  label="Type"
+                  v-model="upload.type"
+                ></v-select>
+                <v-text-field
+                  label="Select Image"
+                  v-model="imageName"
+                  @click="pickFile"
+                  prepend-icon="attach_file"
+                ></v-text-field>
+                <input
+                  type="file"
+                  style="display: none"
+                  ref="image"
+                  accept="image/*"
+                  @change="onFilePicked"
+                >
+              </v-form>
+              <v-btn color="primary" @click="uploadPreuve">Envoyer</v-btn>
+              <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-card>
 </template>
 
 <script>
 import Alert from "@/components/Alert";
 var moment = require("moment");
+
 export default {
   name: "Role",
   components: {
@@ -63,6 +115,7 @@ export default {
   },
   data() {
     return {
+      imageName: "",
       alert: {
         message: "",
         type: ""
@@ -71,7 +124,7 @@ export default {
         file: null,
         type: null
       },
-      options: [
+      items: [
         { value: "Badge", text: "Badge" },
         { value: "Certificat de Scolarite", text: "Certificat de Scolarite" },
         { value: "Contrat de Travail", text: "Contrat de Travail" }
@@ -83,6 +136,19 @@ export default {
     user: {}
   },
   methods: {
+    pickFile() {
+      this.$refs.image.click();
+    },
+    onFilePicked(e) {
+      const files = e.target.files;
+      if (files[0] !== undefined) {
+        this.imageName = files[0].name;
+        this.upload.file = files[0];
+        if (this.imageName.lastIndexOf(".") <= 0) {
+          return;
+        }
+      }
+    },
     uploadPreuve() {
       alert.type = "";
       alert.message = "";
@@ -131,5 +197,50 @@ export default {
 };
 </script>
 
-<style>
-</style>
+// <div>
+//     <b-card bg-variant="light" header="Validez votre statue" class="text-center shadow-sm">
+//       <b-card-text
+//         v-if="Object.entries(certificat).length != 0 || certificat.constructor != Object"
+//       >
+//         Voici les informations de votre statue:
+//         <span v-if="certificat.valide === 1">
+//           <br>Validité:
+//           <br>
+//           <span class="font-weight-bold badge badge-success text-wrap">Valide</span>
+//           <br>Type:
+//           <span class="font-weight-bold">
+//             <br>
+//             {{certificat.typec}}
+//           </span>
+//           <br>Date d'Echeance:
+//           <span class="font-weight-bold">
+//             <br>
+//             {{certificat.dateecheance | dateFormat}}
+//           </span>
+//         </span>
+
+//         <span v-if="certificat.valide === 0">
+//           <br>Validité:
+//           <br>
+//           <span class="font-weight-bold badge badge-danger text-wrap">En cours de modération</span>
+//         </span>
+//       </b-card-text>
+//       <b-card-text v-else>
+//         Vous etes un simple utilisateur, pour obtenir le statut d'Etudiant ou d'Enseignant veuillez nous envoyer une piece d'identite prouvant votre statue:
+//         <br>
+//         <b-form @submit.prevent="uploadPreuve">
+//           <b-form-select v-model="upload.type" :options="options" size="sm" class="mt-3"></b-form-select>
+//           <b-form-file
+//             class="mt-2"
+//             v-model="upload.file"
+//             :state="Boolean(upload.file)"
+//             placeholder="Choisissez un fichier..."
+//             drop-placeholder="Glissez un fichier..."
+//             accept=".jpg, .png, .jpeg"
+//           ></b-form-file>
+//           <b-button type="submit" variant="primary" class="mt-2">Envoyer</b-button>
+//         </b-form>
+//         <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
+//       </b-card-text>
+//     </b-card>
+//   </div>

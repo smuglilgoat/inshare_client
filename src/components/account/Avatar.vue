@@ -8,6 +8,18 @@
         drop-placeholder="Drop file here..."
         accept=".jpg, .png, .jpeg"
       ></b-form-file>
+      <b-progress
+        :max="max"
+        variant="info"
+        striped
+        animated
+        class="mt-2"
+        v-if="uploadPercentage != 0"
+      >
+        <b-progress-bar :value="uploadPercentage">
+          <strong>{{ uploadPercentage }} / {{ max }}</strong>
+        </b-progress-bar>
+      </b-progress>
       <b-button type="submit" variant="primary" class="mt-2">Envoyer</b-button>
     </b-form>
     <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
@@ -28,7 +40,9 @@ export default {
         message: "",
         type: ""
       },
-      file: null
+      file: null,
+      uploadPercentage: 0,
+      max: 100
     };
   },
   methods: {
@@ -45,7 +59,12 @@ export default {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`
-          }
+          },
+          onUploadProgress: function(progressEvent) {
+            this.uploadPercentage = parseInt(
+              Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            );
+          }.bind(this)
         })
         .then(() => {
           this.$router.push("/");

@@ -1,65 +1,77 @@
 <template>
-  <div>
-    <b-card bg-variant="light" header="Profile" class="text-center shadow-sm">
-      <b-card-text>
-        <b-container fluid>
-          <b-row>
-            <b-col>
-              Avatar:
+  <v-card>
+    <v-toolbar card flat dense color="primary">
+      <v-toolbar-title>Profile</v-toolbar-title>
+    </v-toolbar>
+    <v-container fluid grid-list-md text-xs-center fill-height>
+      <v-layout row wrap align-center>
+        <v-flex grow d-flex>
+          <v-card flat>
+            <v-card-text>
+              <strong>Avatar</strong>
               <br>
-              <b-img thumbnail fluid :src="user.avatar" width="150px" rounded="circle"></b-img>
-            </b-col>
-            <b-col>
-              <b-row>
-                Username:
-                <span class="font-weight-bold">
+              <v-avatar size="150px" color="grey lighten-4">
+                <img :src="user.avatar" alt="alt">
+              </v-avatar>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex grow d-flex>
+          <v-layout row wrap align-center justify-space-around column fill-height>
+            <v-flex>
+              <v-card flat>
+                <v-card-text class="py-2 my-1">
+                  <strong>Utilisateur</strong>
                   <br>
                   {{user.username}}
-                </span>
-              </b-row>
-              <b-row>
-                Email:
-                <span class="font-weight-bold">
+                </v-card-text>
+              </v-card>
+            </v-flex>
+            <v-flex>
+              <v-card flat>
+                <v-card-text class="py-2 my-1">
+                  <strong>Email</strong>
                   <br>
                   {{user.email}}
-                </span>
-              </b-row>
-              <b-row v-if="user.role">
-                Role:
-                <span class="font-weight-bold">
+                </v-card-text>
+              </v-card>
+            </v-flex>
+            <v-flex>
+              <v-card flat>
+                <v-card-text class="py-2 my-1">
+                  <strong>Rôle</strong>
                   <br>
                   {{user.role}}
-                </span>
-              </b-row>
-            </b-col>
-            <b-col v-if="user.domaine || user.niveauetud || user.niveauense">
-              <b-row v-if="user.domaine">
-                Domaine:
-                <span class="font-weight-bold">
+                </v-card-text>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex grow d-flex v-if="user.domaine">
+          <v-layout row wrap align-center justify-space-around column fill-height>
+            <v-flex>
+              <v-card flat>
+                <v-card-text class="py-2 my-1">
+                  <strong>Domaine</strong>
                   <br>
                   {{user.domaine}}
-                </span>
-              </b-row>
-              <b-row v-if="user.niveauetud">
-                Niveau:
-                <span class="font-weight-bold">
+                </v-card-text>
+              </v-card>
+            </v-flex>
+            <v-flex>
+              <v-card flat>
+                <v-card-text class="py-2 my-1">
+                  <strong>Niveau</strong>
                   <br>
-                  {{user.niveauetud}}
-                </span>
-              </b-row>
-              <b-row v-else-if="user.niveauense">
-                Niveau:
-                <span class="font-weight-bold">
-                  <br>
-                  {{user.niveauense}}
-                </span>
-              </b-row>
-            </b-col>
-          </b-row>
-        </b-container>
-      </b-card-text>
-    </b-card>
-  </div>
+                  {{user.niveau}}
+                </v-card-text>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-card>
 </template>
 
 <script>
@@ -70,6 +82,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-</style>

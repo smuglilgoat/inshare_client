@@ -1,15 +1,15 @@
 import { sync } from 'vuex-router-sync';
 import Vue from 'vue';
-import VeeValidate from 'vee-validate';
-import BootstrapVue from 'bootstrap-vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 import axios from 'axios';
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
 
+Vue.use(Vuetify);
 window.axios = axios;
 axios.defaults.baseURL = 'http://127.0.0.1:3333';
-axios.defaults.timeout = 5000;
 const token = localStorage.getItem('token');
 if (token) {
 	axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -17,17 +17,6 @@ if (token) {
 
 Vue.config.productionTip = false;
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-// add these before Vue is instantiated
-
-Vue.use(BootstrapVue);
-Vue.use(VeeValidate, {
-	// This is the default
-	inject: true,
-	// Important to name this something other than 'fields'
-	fieldsBagName: 'veeFields'
-});
 sync(store, router);
 new Vue({
 	router,
