@@ -1,6 +1,12 @@
 <template>
   <div>
-    <b-form @submit.prevent="updateAvatar">
+    <v-form>
+      <v-text-field label="Avatar" v-model="imageName" @click="pickFile" prepend-icon="attach_file"></v-text-field>
+      <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked">
+      <v-progress-linear v-model="uploadPercentage" v-show="uploadPercentage != 0"></v-progress-linear>
+      <v-btn color="info" @click="updateAvatar">Envoyer</v-btn>
+    </v-form>
+    <!-- <b-form @submit.prevent="updateAvatar">
       <b-form-file
         v-model="file"
         :state="Boolean(file)"
@@ -21,7 +27,7 @@
         </b-progress-bar>
       </b-progress>
       <b-button type="submit" variant="primary" class="mt-2">Envoyer</b-button>
-    </b-form>
+    </b-form>-->
     <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
   </div>
 </template>
@@ -40,12 +46,26 @@ export default {
         message: "",
         type: ""
       },
+      imageName: "",
       file: null,
       uploadPercentage: 0,
       max: 100
     };
   },
   methods: {
+    pickFile() {
+      this.$refs.image.click();
+    },
+    onFilePicked(e) {
+      const files = e.target.files;
+      if (files[0] !== undefined) {
+        this.imageName = files[0].name;
+        this.file = files[0];
+        if (this.imageName.lastIndexOf(".") <= 0) {
+          return;
+        }
+      }
+    },
     updateAvatar() {
       alert.type = "";
       alert.message = "";
@@ -67,7 +87,7 @@ export default {
           }.bind(this)
         })
         .then(() => {
-          this.$router.push("/");
+          this.$store.dispatch("logout").then(() => this.$router.push("/"));
         })
         .catch(error => {
           this.alert = Object.assign({}, this.alert, {

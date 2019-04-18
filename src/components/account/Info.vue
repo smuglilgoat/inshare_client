@@ -1,32 +1,18 @@
 <template>
   <div>
-    <b-form @submit.prevent="updateUsername">
-      <b-form-group label="Nom d'Utilisateur">
-        <b-form-input
-          id="usernameInput"
-          type="text"
-          name="username"
-          v-model="user.username"
-          placeholder="Entrez votre nouveau nom d'utilisateur"
-        />
-      </b-form-group>
-
-      <b-button type="submit" variant="primary">Envoyer</b-button>
-    </b-form>
-    <hr>
-    <b-form @submit.prevent="updateEmail">
-      <b-form-group label="Email">
-        <b-form-input
-          id="emailInput"
-          type="email"
-          name="email"
-          v-model="user.email"
-          placeholder="Entrez votre nouveau email"
-        />
-      </b-form-group>
-
-      <b-button type="submit" variant="primary">Envoyer</b-button>
-    </b-form>
+    <v-form>
+      <v-text-field
+        name="username"
+        label="Nom d'utilisateur"
+        id="username"
+        prepend-icon="person"
+        v-model="user.username"
+      ></v-text-field>
+      <v-btn color="primary" @click="updateUsername">Envoyer</v-btn>
+      <v-divider></v-divider>
+      <v-text-field name="email" label="Email" id="email" prepend-icon="email" v-model="user.email"></v-text-field>
+      <v-btn color="primary" @click="updateEmail">Envoyer</v-btn>
+    </v-form>
     <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
   </div>
 </template>
@@ -72,7 +58,7 @@ export default {
         .then(() => {
           this.user.username = "";
           this.user.email = "";
-          this.$router.push("/");
+          this.$store.dispatch("logout").then(() => this.$router.push("/"));
         })
         .catch(error => {
           this.user.username = "";
@@ -103,7 +89,7 @@ export default {
         .then(() => {
           this.user.username = "";
           this.user.email = "";
-          this.$router.push("/");
+          this.$store.dispatch("logout").then(() => this.$router.push("/"));
         })
         .catch(error => {
           this.user.username = "";

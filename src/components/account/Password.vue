@@ -1,28 +1,24 @@
 <template>
   <div>
-    <b-form @submit.prevent="updatePassword">
-      <b-form-group label="Mot de passe actuel">
-        <b-form-input
-          id="passwordInput"
-          type="password"
-          name="password"
-          v-model="password"
-          placeholder="Entrez votre mot de passe"
-        />
-      </b-form-group>
-
-      <b-form-group label="Nouveau mot de passe">
-        <b-form-input
-          id="newpasswordInput"
-          type="password"
-          name="newpassword"
-          v-model="newpassword"
-          placeholder="Entrez votre nouveau mot de passe"
-        />
-      </b-form-group>
-
-      <b-button type="submit" variant="primary">Envoyer</b-button>
-    </b-form>
+    <v-form>
+      <v-text-field
+        prepend-icon="lock"
+        name="oldpassword"
+        label="Mot de passe actuel"
+        id="oldpassword"
+        type="password"
+        v-model="password"
+      ></v-text-field>
+      <v-text-field
+        prepend-icon="lock"
+        name="newpassword"
+        label="Nouveau mot de passe"
+        id="newpassword"
+        type="password"
+        v-model="newpassword"
+      ></v-text-field>
+      <v-btn color="info" @click="updatePassword">Envoyer</v-btn>
+    </v-form>
     <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
   </div>
 </template>
@@ -67,7 +63,7 @@ export default {
         .then(() => {
           this.password = "";
           this.newpassword = "";
-          this.$router.push("/");
+          this.$store.dispatch("logout").then(() => this.$router.push("/"));
         })
         .catch(error => {
           this.password = "";

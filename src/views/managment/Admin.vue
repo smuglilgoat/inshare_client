@@ -1,22 +1,41 @@
 <template>
   <div>
-    <b-card no-body class="ml-2 mr-2">
-      <b-tabs card>
-        <b-tab title="Certificats">
-          <b-card-text>
-            <Certificats/>
-          </b-card-text>
-        </b-tab>
-        <b-tab title="Utilisateurs" active>
-          <b-card-text>
+    <v-tabs centered color="primary" dark icons-and-text grow>
+      <v-tabs-slider color="yellow"></v-tabs-slider>
+      <v-tab key="2">
+        Utilisateurs
+        <v-icon>assignment_ind</v-icon>
+      </v-tab>
+      <v-tab-item key="2">
+        <v-card flat>
+          <v-card-text>
             <Users/>
-          </b-card-text>
-        </b-tab>
-        <b-tab title="Documents">
-          <b-card-text></b-card-text>
-        </b-tab>
-      </b-tabs>
-    </b-card>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      
+      <v-tab key="1">
+        Certificats
+        <v-icon>card_membership</v-icon>
+      </v-tab>
+      <v-tab-item key="1">
+        <v-card flat>
+          <v-card-text>
+            <Certificats/>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+
+      <v-tab key="3">
+        Documents
+        <v-icon>insert_drive_file</v-icon>
+      </v-tab>
+      <v-tab-item key="3">
+        <v-card flat>
+          <v-card-text></v-card-text>
+        </v-card>
+      </v-tab-item>
+    </v-tabs>
   </div>
 </template>
 

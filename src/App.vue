@@ -11,22 +11,6 @@
             <v-list-tile-title>Acceuil</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile v-if="isLoggedIn" to="/profile">
-          <v-list-tile-action>
-            <v-icon>account_box</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Profile</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile v-if="isLoggedIn" to="/account">
-          <v-list-tile-action>
-            <v-icon>settings</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Paramètres</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar app fixed clipped-left>
@@ -52,6 +36,24 @@
           </v-avatar>
         </v-btn>
         <v-list class="pa-0">
+          <v-list-tile v-if="isLoggedIn" to="/profile">
+            <v-list-tile-action>
+              <v-icon>account_box</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Profile</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
+          <v-list-tile v-if="isLoggedIn" to="/account">
+            <v-list-tile-action>
+              <v-icon>settings</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Paramètres</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
           <v-list-tile @click="logout" ripple="ripple" rel="noopener">
             <v-list-tile-action>
               <v-icon>power_settings_new</v-icon>
@@ -71,8 +73,11 @@
         <router-view></router-view>
       </v-container>
     </v-content>
-    <v-footer app fixed>
-      <span>&copy; 2019</span>
+    <v-footer app fixed text-md-center>
+      <span class="mr-2">&copy;2019</span>
+      <router-link to="/admin" v-if="isAdmin">
+        <a>Panneau d'administration</a>
+      </router-link>
     </v-footer>
   </v-app>
 </template>
@@ -86,6 +91,9 @@ export default {
   computed: {
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;
+    },
+    isAdmin() {
+      return this.$store.getters.isAdmin;
     },
     userAvatar() {
       return this.$store.getters.userAvatar;

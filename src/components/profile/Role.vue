@@ -76,7 +76,7 @@
                   v-model="upload.type"
                 ></v-select>
                 <v-text-field
-                  label="Select Image"
+                  label="Preuve"
                   v-model="imageName"
                   @click="pickFile"
                   prepend-icon="attach_file"
