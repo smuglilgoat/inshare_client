@@ -6,28 +6,6 @@
       <v-progress-linear v-model="uploadPercentage" v-show="uploadPercentage != 0"></v-progress-linear>
       <v-btn color="info" @click="updateAvatar">Envoyer</v-btn>
     </v-form>
-    <!-- <b-form @submit.prevent="updateAvatar">
-      <b-form-file
-        v-model="file"
-        :state="Boolean(file)"
-        placeholder="Choose a file..."
-        drop-placeholder="Drop file here..."
-        accept=".jpg, .png, .jpeg"
-      ></b-form-file>
-      <b-progress
-        :max="max"
-        variant="info"
-        striped
-        animated
-        class="mt-2"
-        v-if="uploadPercentage != 0"
-      >
-        <b-progress-bar :value="uploadPercentage">
-          <strong>{{ uploadPercentage }} / {{ max }}</strong>
-        </b-progress-bar>
-      </b-progress>
-      <b-button type="submit" variant="primary" class="mt-2">Envoyer</b-button>
-    </b-form>-->
     <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
   </div>
 </template>

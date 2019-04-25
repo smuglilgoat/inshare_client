@@ -39,6 +39,11 @@ export default new Router({
 			path: '/admin',
 			name: 'administration',
 			component: () => import('./views/managment/Admin.vue')
+		},
+		{
+			path: '/upload',
+			name: 'upload',
+			component: () => import('./views/upload/Upload.vue')
 		}
 	]
 });

@@ -4,7 +4,7 @@
       <v-flex>
         <Info :user="user"/>
       </v-flex>
-      <v-flex>
+      <v-flex v-if="!isAdmin">
         <Role :user="user"/>
       </v-flex>
     </v-layout>
@@ -32,21 +32,10 @@ export default {
   },
   mounted() {
     this.user = this.$store.getters.user;
-    // this.fetchAuthenticatedUser();
   },
-  methods: {
-    fetchAuthenticatedUser() {
-      const token = localStorage.getItem("token");
-
-      axios
-        .get("/read/user", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then(({ data }) => {
-          this.user = data;
-        });
+  computed: {
+    isAdmin() {
+      return this.$store.getters.isAdmin;
     }
   }
 };
