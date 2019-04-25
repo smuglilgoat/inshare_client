@@ -6,34 +6,55 @@
       <v-btn color="primary" @click="reset()">Réessayer</v-btn>
     </div>
 
-    <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
+    <form enctype="multipart/form-data" novalidate v-if="isInitial">
       <div class="dropbox">
         <input
           type="file"
           multiple
           :disabled="isSaving"
-          @change="filesChange($event.target.files); fileCount = $event.target.files.length"
+          @change="filesChange($event.target.files)"
           accept="image/*"
           class="input-file"
         >
-        <p v-if="isInitial">
+        <p>
           Glissez et déposez vos fichiers pour commencer
           <br>ou cliquez pour parcourir
         </p>
-        <p v-if="isSaving">Envoie de {{ fileCount }} fichier(s)...</p>
-        <v-progress-linear
-          v-model="uploadPercentage"
-          v-if="isSaving"
-          class="ml-5"
-          style="width: 90%"
-        ></v-progress-linear>
       </div>
     </form>
 
     <!--SUCCESS-->
-    <div v-if="isSuccess">
-      <h2>Envoie de {{ uploadedFiles.length }} fichier(s) réussi.</h2>
-    </div>
+    <v-card v-if="isSuccess || isSaving">
+      <v-toolbar card flat dense color="primary">
+        <v-toolbar-title>Envoie du document...</v-toolbar-title>
+      </v-toolbar>
+      <v-container fluid grid-list-md fill-height>
+        <v-layout row wrap align-center>
+          <v-flex xs2></v-flex>
+          <v-flex xs7>
+            <v-text-field label="Titre" v-model="form.titre"></v-text-field>
+            <v-textarea label="Description" v-model="form.description" flat></v-textarea>
+          </v-flex>
+          <v-flex xs3>
+            <v-text-field label="Domaine" v-model="form.domaine"></v-text-field>
+            <v-text-field label="Domaine" v-model="form.domaine"></v-text-field>
+            <v-text-field label="Domaine" v-model="form.domaine"></v-text-field>
+          </v-flex>
+          <v-flex>
+            <v-progress-linear
+              v-model="uploadPercentage"
+              v-if="!isSuccess"
+              class="ml-5"
+              style="width: 90%"
+            ></v-progress-linear>
+          </v-flex>
+          <v-flex class="text-md-right">
+            <v-btn color="error" @click="cancel" :disabled="!isSuccess">Annuler</v-btn>
+            <v-btn color="success" @click="update" :disabled="!isSuccess">Envoyer</v-btn>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card>
   </div>
 </template>
 
@@ -53,6 +74,14 @@ export default {
   },
   data() {
     return {
+      form: {
+        titre: "",
+        description: "",
+        langue: "",
+        type: "",
+        domaine: ""
+      },
+      document: {},
       uploadedFiles: [],
       uploadError: null,
       currentStatus: null,
@@ -89,7 +118,7 @@ export default {
 
       this.upload(formData)
         .then(x => {
-          this.uploadedFiles = [].concat(x);
+          this.document = x.data;
           this.currentStatus = STATUS_SUCCESS;
         })
         .catch(err => {
@@ -122,6 +151,45 @@ export default {
           );
         }.bind(this)
       });
+    },
+    cancel() {
+      const token = localStorage.getItem("token");
+      axios
+        .delete(
+          "delete/document",
+          {
+            data: {
+              id: this.document.id
+            }
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        .then(() => this.$router.push("/"));
+    },
+    update() {
+      const token = localStorage.getItem("token");
+      axios
+        .put(
+          "update/document",
+          {
+            id: this.document.id,
+            titre: this.form.titre,
+            description: this.form.description,
+            langue: this.form.langue,
+            type: this.form.type,
+            domaine: this.form.domaine
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        .then(() => this.$router.push("/"));
     }
   },
   mounted() {
