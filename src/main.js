@@ -6,7 +6,10 @@ import store from './store';
 import axios from 'axios';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
+import 'viewerjs/dist/viewer.css';
+import Viewer from 'v-viewer';
 
+Vue.use(Viewer);
 Vue.use(Vuetify);
 window.axios = axios;
 axios.defaults.baseURL = 'http://127.0.0.1:3333';

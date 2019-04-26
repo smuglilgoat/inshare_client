@@ -28,27 +28,29 @@
       <v-toolbar card flat dense color="primary">
         <v-toolbar-title>Envoie du document...</v-toolbar-title>
       </v-toolbar>
-      <v-container fluid grid-list-md fill-height>
+      <v-container fluid fill-height>
         <v-layout row wrap align-center>
-          <v-flex xs2></v-flex>
-          <v-flex xs7>
+          <v-flex md3 lg2 xl1>
+            <v-img :src="document.link" aspect-ratio="1" contain min-width="170px"></v-img>
+          </v-flex>
+          <v-flex grow>
             <v-text-field label="Titre" v-model="form.titre"></v-text-field>
             <v-textarea label="Description" v-model="form.description" flat></v-textarea>
           </v-flex>
-          <v-flex xs3>
+          <v-flex grow>
             <v-text-field label="Domaine" v-model="form.domaine"></v-text-field>
-            <v-text-field label="Domaine" v-model="form.domaine"></v-text-field>
-            <v-text-field label="Domaine" v-model="form.domaine"></v-text-field>
+            <v-select :items="langue" label="Langue" v-model="form.langue"></v-select>
+            <v-select :items="type" label="Type" v-model="form.type"></v-select>
           </v-flex>
+        </v-layout>
+      </v-container>
+      <v-container fluid grid-list-xs fill-height text-xs-right>
+        <v-layout row wrap>
+          <v-flex xs12>
+            <v-progress-linear v-model="uploadPercentage" v-if="!isSuccess"></v-progress-linear>
+          </v-flex>
+          <v-spacer></v-spacer>
           <v-flex>
-            <v-progress-linear
-              v-model="uploadPercentage"
-              v-if="!isSuccess"
-              class="ml-5"
-              style="width: 90%"
-            ></v-progress-linear>
-          </v-flex>
-          <v-flex class="text-md-right">
             <v-btn color="error" @click="cancel" :disabled="!isSuccess">Annuler</v-btn>
             <v-btn color="success" @click="update" :disabled="!isSuccess">Envoyer</v-btn>
           </v-flex>
@@ -81,6 +83,14 @@ export default {
         type: "",
         domaine: ""
       },
+      langue: ["Arabe", "Anglais", "Français"],
+      type: [
+        "Support de Cours",
+        "Note de Cours",
+        "Série de TD",
+        "Série de TP",
+        "Examination"
+      ],
       document: {},
       uploadedFiles: [],
       uploadError: null,
@@ -225,5 +235,11 @@ export default {
   font-size: 1.2em;
   text-align: center;
   padding: 50px 0;
+}
+
+@media screen and (max-width: 840px) {
+  .stupidflex {
+    margin-left: 7%;
+  }
 }
 </style>

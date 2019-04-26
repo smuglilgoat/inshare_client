@@ -58,10 +58,6 @@
         <v-icon class="mr-2">cloud_upload</v-icon>Uploader
       </v-btn>
       <v-divider vertical inset></v-divider>
-      <v-btn icon @click.stop="dark = !dark">
-        <v-icon>invert_colors</v-icon>
-      </v-btn>
-      <v-divider vertical inset></v-divider>
 
       <v-menu
         offset-y
@@ -91,6 +87,15 @@
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>Paramètres</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
+          <v-list-tile @click="dark = !dark" ripple="ripple" rel="noopener">
+            <v-list-tile-action>
+              <v-icon>invert_colors</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Thème</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
           <v-divider></v-divider>

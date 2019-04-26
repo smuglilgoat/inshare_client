@@ -30,7 +30,7 @@ export default {
 
     return token ? next() : next("/auth/login");
   },
-  mounted() {
+  created() {
     this.user = this.$store.getters.user;
   },
   computed: {

@@ -9,6 +9,7 @@
 	"dependencies": {
 		"axios": "^0.18.0",
 		"moment": "^2.24.0",
+		"v-viewer": "^1.4.0",
 		"vee-validate": "^2.2.0",
 		"vue": "^2.6.10",
 		"vue-router": "^3.0.1",
