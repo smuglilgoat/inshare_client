@@ -1,21 +1,25 @@
 <template>
   <div>
-    <h1>Document {{ doc .id}}</h1>
     <ImgViewer :doc="doc"/>
+    <Description :doc="doc" :auther="auther"/>
   </div>
 </template>
 
 <script>
 import ImgViewer from "@/components/document/viewers/ImgViewer";
+import Description from "@/components/document/Description";
 export default {
   components: {
-    ImgViewer
+    ImgViewer,
+    Description
   },
   data() {
     return {
-      doc: {}
+      doc: {},
+      auther: {}
     };
   },
+
   created() {
     this.fetchDocument();
   },
@@ -27,7 +31,14 @@ export default {
             id: this.$route.params.id
           }
         })
-        .then(({ data }) => (this.doc = data));
+        .then(({ data }) => {
+          this.doc = data;
+        })
+        .then(() => {
+          axios
+            .get("/read/user/" + this.doc.user_id)
+            .then(({ data }) => (this.auther = data));
+        });
     }
   }
 };

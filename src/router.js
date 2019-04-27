@@ -49,6 +49,11 @@ export default new Router({
 			path: '/document/:id',
 			name: 'document',
 			component: () => import('./views/document/Document.vue')
+		},
+		{
+			path: '/documents/exams',
+			name: 'exams',
+			component: () => import('./views/document/Exams.vue')
 		}
 	]
 });
