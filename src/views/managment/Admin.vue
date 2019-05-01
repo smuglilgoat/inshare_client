@@ -45,6 +45,8 @@
 import Certificats from "@/components/admin/Certificats";
 import Users from "@/components/admin/Users";
 import Documents from "@/components/admin/Documents";
+import store from "@/store";
+import { log } from "util";
 
 export default {
   components: {
@@ -54,22 +56,15 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     const token = localStorage.getItem("token");
-    if (token) {
-      axios
-        .get("/users/" + this.$store.getters.user.id, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then(({ data }) => {
-          if (data.role != "Administrateur" && data.role != "Moderateur") {
-            return next("/");
-          } else {
-            return next();
-          }
-        });
-    } else {
+    console.log();
+
+    if (
+      store.getters.user.role != "Administrateur" &&
+      store.getters.user.role != "Moderateur"
+    ) {
       return next("/auth/login");
+    } else {
+      return next();
     }
   }
 };

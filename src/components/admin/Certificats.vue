@@ -200,7 +200,7 @@ export default {
           }
         })
         .then(({ data }) => {
-          this.certificats = data;
+          this.certificats = data.certificats;
         });
     },
     fetchUsers() {
@@ -213,7 +213,7 @@ export default {
           }
         })
         .then(({ data }) => {
-          data.forEach(e => {
+          data.users.forEach(e => {
             this.users.set(e.id, e.username);
           });
           this.loading = false;

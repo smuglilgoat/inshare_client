@@ -179,7 +179,7 @@ export default {
       const token = localStorage.getItem("token");
 
       axios
-        .get("/certificats/" + user.id, {
+        .get("/certificats/" + this.user.id, {
           headers: {
             Authorization: `Bearer ${token}`
           }

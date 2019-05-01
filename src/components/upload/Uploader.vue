@@ -128,7 +128,7 @@ export default {
 
       this.upload(formData)
         .then(x => {
-          this.document = x.data;
+          this.document = x.data.document;
           this.currentStatus = STATUS_SUCCESS;
         })
         .catch(err => {
@@ -150,7 +150,7 @@ export default {
     },
     upload(formData) {
       const token = localStorage.getItem("token");
-      return axios.post("create/document", formData, {
+      return axios.post("/documents", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`
@@ -165,28 +165,19 @@ export default {
     cancel() {
       const token = localStorage.getItem("token");
       axios
-        .delete(
-          "delete/document/cancel",
-          {
-            data: {
-              id: this.document.id
-            }
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
+        .delete("/documents/" + this.document.id, {
+          headers: {
+            Authorization: `Bearer ${token}`
           }
-        )
+        })
         .then(() => this.$router.push("/"));
     },
     update() {
       const token = localStorage.getItem("token");
       axios
         .put(
-          "update/document/upload",
+          "/documents/" + this.document.id,
           {
-            id: this.document.id,
             titre: this.form.titre,
             description: this.form.description,
             langue: this.form.langue,

@@ -170,7 +170,7 @@ export default {
       val || this.close();
     }
   },
-  created() {
+  mounted() {
     this.fetchDocuments();
   },
   methods: {
@@ -229,7 +229,7 @@ export default {
           }
         })
         .then(({ data }) => {
-          this.documents = data;
+          this.documents = data.docs;
           this.loading = false;
         });
     }

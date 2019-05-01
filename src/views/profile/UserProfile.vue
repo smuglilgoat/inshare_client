@@ -26,7 +26,7 @@ export default {
   methods: {
     fetchUser() {
       axios.get("/users/" + this.$route.params.id).then(({ data }) => {
-        this.user = data;
+        this.user = data.user;
       });
     }
   }

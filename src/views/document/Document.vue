@@ -28,12 +28,12 @@ export default {
       axios
         .get("/documents/" + this.$route.params.id)
         .then(({ data }) => {
-          this.doc = data;
+          this.doc = data.document;
         })
         .then(() => {
           axios
             .get("/users/" + this.doc.user_id)
-            .then(({ data }) => (this.auther = data));
+            .then(({ data }) => (this.auther = data.user));
         });
     }
   }

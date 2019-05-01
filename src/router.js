@@ -51,7 +51,7 @@ export default new Router({
 			component: () => import('./views/upload/Upload.vue')
 		},
 		{
-			path: '/documents/:id',
+			path: '/documents/view/:id',
 			name: 'document',
 			component: () => import('./views/document/Document.vue')
 		},

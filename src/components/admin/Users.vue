@@ -194,7 +194,7 @@ export default {
           }
         })
         .then(({ data }) => {
-          this.users = data;
+          this.users = data.users;
           this.loading = false;
         });
     }

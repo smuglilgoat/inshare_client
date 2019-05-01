@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Examins</h1>
-    <ul id="example-1">
+    <ul>
       <li v-for="doc in docs">
         <a @click="toDoc(doc.id)">{{ doc.titre }}</a>
       </li>
@@ -22,11 +22,11 @@ export default {
   methods: {
     fetchDocuments() {
       axios
-        .get("/documents/query=" + "Examination")
-        .then(({ data }) => (this.docs = data));
+        .get("/documents/type=Examination")
+        .then(({ data }) => (this.docs = data.docs));
     },
     toDoc(id) {
-      this.$router.push("/documents/" + id);
+      this.$router.push("/documents/view/" + id);
     }
   }
 };
