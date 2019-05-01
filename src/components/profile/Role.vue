@@ -159,7 +159,7 @@ export default {
       formData.append("file", this.upload.file);
       formData.append("type", this.upload.type);
       axios
-        .post("/create/certificat", formData, {
+        .post("/certificats", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`
@@ -179,7 +179,7 @@ export default {
       const token = localStorage.getItem("token");
 
       axios
-        .get("/read/certificat", {
+        .get("/certificats/" + user.id, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -196,51 +196,3 @@ export default {
   }
 };
 </script>
-
-// <div>
-//     <b-card bg-variant="light" header="Validez votre statue" class="text-center shadow-sm">
-//       <b-card-text
-//         v-if="Object.entries(certificat).length != 0 || certificat.constructor != Object"
-//       >
-//         Voici les informations de votre statue:
-//         <span v-if="certificat.valide === 1">
-//           <br>Validité:
-//           <br>
-//           <span class="font-weight-bold badge badge-success text-wrap">Valide</span>
-//           <br>Type:
-//           <span class="font-weight-bold">
-//             <br>
-//             {{certificat.typec}}
-//           </span>
-//           <br>Date d'Echeance:
-//           <span class="font-weight-bold">
-//             <br>
-//             {{certificat.dateecheance | dateFormat}}
-//           </span>
-//         </span>
-
-//         <span v-if="certificat.valide === 0">
-//           <br>Validité:
-//           <br>
-//           <span class="font-weight-bold badge badge-danger text-wrap">En cours de modération</span>
-//         </span>
-//       </b-card-text>
-//       <b-card-text v-else>
-//         Vous etes un simple utilisateur, pour obtenir le statut d'Etudiant ou d'Enseignant veuillez nous envoyer une piece d'identite prouvant votre statue:
-//         <br>
-//         <b-form @submit.prevent="uploadPreuve">
-//           <b-form-select v-model="upload.type" :options="options" size="sm" class="mt-3"></b-form-select>
-//           <b-form-file
-//             class="mt-2"
-//             v-model="upload.file"
-//             :state="Boolean(upload.file)"
-//             placeholder="Choisissez un fichier..."
-//             drop-placeholder="Glissez un fichier..."
-//             accept=".jpg, .png, .jpeg"
-//           ></b-form-file>
-//           <b-button type="submit" variant="primary" class="mt-2">Envoyer</b-button>
-//         </b-form>
-//         <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
-//       </b-card-text>
-//     </b-card>
-//   </div>

@@ -13,19 +13,31 @@
                 <v-text-field v-model="editedItem.id" label="ID" readonly></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md6>
-                <v-text-field v-model="editedItem.username" label="Nom d'utilisateur" readonly></v-text-field>
+                <v-text-field v-model="editedItem.user_id" label="Utilisateur" readonly></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md6>
-                <v-text-field v-model="editedItem.email" label="Email" readonly></v-text-field>
+                <v-text-field v-model="editedItem.titre" label="Titre"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md6>
-                <v-select :items="roles" label="Role" v-model="editedItem.role"></v-select>
+                <v-textarea v-model="editedItem.description" label="Description"></v-textarea>
+              </v-flex>
+              <v-flex xs12 sm6 md6>
+                <v-select :items="langue" label="Langue" v-model="editedItem.langue"></v-select>
               </v-flex>
               <v-flex xs12 sm6 md6>
                 <v-text-field v-model="editedItem.domaine" label="Domaine"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md6>
-                <v-text-field v-model="editedItem.niveau" label="Niveau"></v-text-field>
+                <v-text-field v-model="editedItem.taille" label="Taille" readonly></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md6>
+                <v-textarea v-model="editedItem.tags" label="Tags"></v-textarea>
+              </v-flex>
+              <v-flex xs12 sm6 md6>
+                <v-text-field v-model="editedItem.evaluation" label="Evaluation" readonly></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md6>
+                <v-text-field v-model="editedItem.vues" label="Visionnement" readonly></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
@@ -34,14 +46,14 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click="close">Annuler</v-btn>
-          <v-btn color="blue darken-1" flat @click="updateUser">Sauvegarder</v-btn>
+          <v-btn color="blue darken-1" flat @click="updateDoc">Sauvegarder</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <v-data-table
       :headers="headers"
-      :items="users"
+      :items="documents"
       :loading="loading"
       :search="search"
       class="elevation-1"
@@ -49,11 +61,18 @@
       <v-progress-linear v-slot:progress color="blue" indeterminate></v-progress-linear>
       <template v-slot:items="props">
         <td>{{ props.item.id }}</td>
-        <td class="text-xs-left">{{ props.item.username }}</td>
-        <td class="text-xs-left">{{ props.item.email }}</td>
-        <td class="text-xs-left">{{ props.item.role }}</td>
+        <td class="text-xs-left">{{ props.item.user_id }}</td>
+        <td class="text-xs-left">
+          <a :href="`${props.item.link}`" target="_blank">Cliquez</a>
+        </td>
+        <td class="text-xs-left">{{ props.item.titre }}</td>
+        <td class="text-xs-left">{{ props.item.description }}</td>
+        <td class="text-xs-left">{{ props.item.langue }}</td>
+        <td class="text-xs-left">{{ props.item.taille }}</td>
         <td class="text-xs-left">{{ props.item.domaine }}</td>
-        <td class="text-xs-left">{{ props.item.niveau }}</td>
+        <td class="text-xs-left">{{ props.item.tags }}</td>
+        <td class="text-xs-left">{{ props.item.evaluation }}</td>
+        <td class="text-xs-left">{{ props.item.vues }}</td>
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
           <v-icon small @click="deleteUser(props.item)">delete</v-icon>
@@ -83,7 +102,7 @@
 import Alert from "@/components/Alert.vue";
 
 export default {
-  name: "Users",
+  name: "Documents",
   components: {
     Alert
   },
@@ -96,39 +115,53 @@ export default {
       search: "",
       dialog: false,
       loading: true,
-      users: [],
+      documents: [],
       headers: [
         { text: "ID", align: "left", value: "id" },
-        { text: "Nom d'utilisateur", value: "username" },
-        { text: "Email", value: "email" },
-        { text: "Rôle", value: "role" },
+        { text: "Utilisateur", value: "user_id" },
+        { text: "Lien", value: "link" },
+        { text: "Titre", value: "titre" },
+        { text: "Description", value: "description" },
+        { text: "Langue", value: "langue" },
+        { text: "Taille", value: "taille" },
         { text: "Domaine", value: "domaine" },
-        { text: "Niveau", value: "niveau" },
+        { text: "Tags", value: "tags" },
+        { text: "Evaluation", value: "evaluation" },
+        { text: "Visionnement", value: "vues" },
         { text: "Actions", value: "id", sortable: false }
       ],
       editedIndex: -1,
       editedItem: {
         id: "",
-        username: "",
-        email: "",
-        role: "",
+        user_id: "",
+        link: "",
+        titre: "",
+        description: "",
+        taille: "",
         domaine: "",
-        niveau: ""
+        tags: "",
+        evaluation: "",
+        vues: ""
       },
       defaultItem: {
         id: "",
-        username: "",
-        email: "",
-        role: "",
+        user_id: "",
+        link: "",
+        titre: "",
+        description: "",
+        taille: "",
         domaine: "",
-        niveau: ""
+        tags: "",
+        evaluation: "",
+        vues: ""
       },
-      roles: [
-        "Simple",
-        "Moderateur",
-        "Administrateur",
-        "Etudiant",
-        "Enseignant"
+      langue: ["Arabe", "Anglais", "Français"],
+      type: [
+        "Support de Cours",
+        "Note de Cours",
+        "Série de TD",
+        "Série de TP",
+        "Examination"
       ]
     };
   },
@@ -138,11 +171,11 @@ export default {
     }
   },
   created() {
-    this.fetchUsers();
+    this.fetchDocuments();
   },
   methods: {
     editItem(item) {
-      this.editedIndex = this.users.indexOf(item);
+      this.editedIndex = this.documents.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
@@ -151,17 +184,19 @@ export default {
       this.editedItem = Object.assign({}, this.defaultItem);
       this.editedIndex = -1;
     },
-    updateUser() {
+    updateDoc() {
       if (this.editedIndex > -1) {
         const token = localStorage.getItem("token");
 
         axios
           .put(
-            "/users/" + this.users[this.editedIndex].id,
+            "/documents/" + this.documents[this.editedIndex].id,
             {
-              role: this.editedItem.role,
+              titre: this.editedItem.titre,
+              description: this.editedItem.description,
+              langue: this.editedItem.langue,
               domaine: this.editedItem.domaine,
-              niveau: this.editedItem.niveau
+              tags: this.editedItem.tags
             },
             {
               headers: {
@@ -177,24 +212,24 @@ export default {
       this.close();
     },
     deleteUser(item) {
-      const index = this.users.indexOf(item);
-      if (confirm("Est-vous sûr de vouloir supprimer cet utilisateur ?")) {
-        axios.delete("/users/" + this.users[index].id).then(() => {
+      const index = this.documents.indexOf(item);
+      if (confirm("Est-vous sûr de vouloir supprimer ce document ?")) {
+        axios.delete("/documents/" + this.documents[index].id).then(() => {
           this.$router.go();
         });
       }
     },
-    fetchUsers() {
+    fetchDocuments() {
       const token = localStorage.getItem("token");
 
       axios
-        .get("/users", {
+        .get("/documents", {
           headers: {
             Authorization: `Bearer ${token}`
           }
         })
         .then(({ data }) => {
-          this.users = data;
+          this.documents = data;
           this.loading = false;
         });
     }

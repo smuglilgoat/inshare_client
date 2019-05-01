@@ -19,17 +19,17 @@
               </v-avatar>
               <v-tooltip top v-if="auther.role === 'Etudiant'">
                 <template v-slot:activator="{ on }">
-                  <v-chip color="info" v-on="on">{{auther.username}}</v-chip>
+                  <v-chip color="info" v-on="on" @click="toAuthor(auther.id)">{{auther.username}}</v-chip>
                 </template>
                 <span>Etudiant</span>
               </v-tooltip>
               <v-tooltip top v-else-if="auther.role === 'Enseignant'">
                 <template v-slot:activator="{ on }">
-                  <v-chip color="success" v-on="on">{{auther.username}}</v-chip>
+                  <v-chip color="success" v-on="on" @click="toAuthor(auther.id)">{{auther.username}}</v-chip>
                 </template>
                 <span>Enseignant</span>
               </v-tooltip>
-              <v-chip v-else>{{auther.username}}</v-chip>
+              <v-chip v-else @click="toAuthor(auther.id)">{{auther.username}}</v-chip>
             </v-flex>
             <v-flex xs2 class="text-xs-right">
               <v-chip>{{doc.vues}} vues</v-chip>
@@ -69,7 +69,7 @@ export default {
   methods: {
     download() {
       axios
-        .get("/read/document/" + this.doc.id + ".jpg", {
+        .get("/documents/" + this.doc.id + ".jpg", {
           responseType: "blob"
         })
         .then(response => {
@@ -80,6 +80,9 @@ export default {
           document.body.appendChild(link);
           link.click();
         });
+    },
+    toAuthor(id) {
+      this.$router.push("/profile/" + id);
     }
   }
 };

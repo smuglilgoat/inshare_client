@@ -166,7 +166,7 @@ export default {
       const token = localStorage.getItem("token");
       axios
         .delete(
-          "delete/document",
+          "delete/document/cancel",
           {
             data: {
               id: this.document.id
@@ -184,7 +184,7 @@ export default {
       const token = localStorage.getItem("token");
       axios
         .put(
-          "update/document",
+          "update/document/upload",
           {
             id: this.document.id,
             titre: this.form.titre,

@@ -40,7 +40,7 @@ export default new Vuex.Store({
 			return new Promise((resolve, reject) => {
 				commit('auth_request');
 				axios
-					.post('/create/register', {
+					.post('/auth/register', {
 						username: user.username,
 						email: user.email,
 						password: user.password
@@ -66,7 +66,7 @@ export default new Vuex.Store({
 			return new Promise((resolve, reject) => {
 				commit('auth_request');
 				axios
-					.post('/read/login', {
+					.post('/auth/login', {
 						email: user.email,
 						password: user.password
 					})

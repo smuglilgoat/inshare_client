@@ -49,7 +49,7 @@ export default {
 
       axios
         .put(
-          "/update/password",
+          "/users/" + this.$store.getters.user.id,
           {
             password: this.password,
             newpassword: this.newpassword

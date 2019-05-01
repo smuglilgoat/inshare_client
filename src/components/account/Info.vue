@@ -45,7 +45,7 @@ export default {
 
       axios
         .put(
-          "/update/ids",
+          "/users/" + this.$store.getters.user.id,
           {
             username: this.user.username
           },
@@ -76,7 +76,7 @@ export default {
 
       axios
         .put(
-          "/update/ids",
+          "/users/" + this.$store.getters.user.id,
           {
             email: this.user.email
           },

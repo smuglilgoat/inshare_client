@@ -26,17 +26,13 @@ export default {
   methods: {
     fetchDocument() {
       axios
-        .get("/read/document", {
-          params: {
-            id: this.$route.params.id
-          }
-        })
+        .get("/documents/" + this.$route.params.id)
         .then(({ data }) => {
           this.doc = data;
         })
         .then(() => {
           axios
-            .get("/read/user/" + this.doc.user_id)
+            .get("/users/" + this.doc.user_id)
             .then(({ data }) => (this.auther = data));
         });
     }

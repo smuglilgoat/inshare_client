@@ -53,7 +53,7 @@ export default {
 
       formData.append("file", this.file);
       axios
-        .post("/update/avatar", formData, {
+        .post("/avatars", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`

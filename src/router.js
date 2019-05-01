@@ -31,6 +31,11 @@ export default new Router({
 			component: () => import('./views/profile/Personal.vue')
 		},
 		{
+			path: '/profile/:id',
+			name: 'userprofile',
+			component: () => import('./views/profile/UserProfile.vue')
+		},
+		{
 			path: '/account',
 			name: 'account',
 			component: () => import('./views/managment/Account.vue')
@@ -46,7 +51,7 @@ export default new Router({
 			component: () => import('./views/upload/Upload.vue')
 		},
 		{
-			path: '/document/:id',
+			path: '/documents/:id',
 			name: 'document',
 			component: () => import('./views/document/Document.vue')
 		},

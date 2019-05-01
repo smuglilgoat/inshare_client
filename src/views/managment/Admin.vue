@@ -13,7 +13,7 @@
           </v-card-text>
         </v-card>
       </v-tab-item>
-      
+
       <v-tab key="1">
         Certificats
         <v-icon>card_membership</v-icon>
@@ -32,7 +32,9 @@
       </v-tab>
       <v-tab-item key="3">
         <v-card flat>
-          <v-card-text></v-card-text>
+          <v-card-text>
+            <Documents/>
+          </v-card-text>
         </v-card>
       </v-tab-item>
     </v-tabs>
@@ -42,17 +44,19 @@
 <script>
 import Certificats from "@/components/admin/Certificats";
 import Users from "@/components/admin/Users";
+import Documents from "@/components/admin/Documents";
 
 export default {
   components: {
     Certificats,
-    Users
+    Users,
+    Documents
   },
   beforeRouteEnter(to, from, next) {
     const token = localStorage.getItem("token");
     if (token) {
       axios
-        .get("/read/user", {
+        .get("/users/" + this.$store.getters.user.id, {
           headers: {
             Authorization: `Bearer ${token}`
           }

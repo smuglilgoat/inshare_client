@@ -22,15 +22,11 @@ export default {
   methods: {
     fetchDocuments() {
       axios
-        .get("/read/documents", {
-          params: {
-            type: "Examination"
-          }
-        })
+        .get("/documents/query=" + "Examination")
         .then(({ data }) => (this.docs = data));
     },
     toDoc(id) {
-      this.$router.push("/document/" + id);
+      this.$router.push("/documents/" + id);
     }
   }
 };

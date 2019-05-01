@@ -170,11 +170,7 @@ export default {
       const index = this.certificats.indexOf(item);
       if (confirm("Est-vous sûr de vouloir supprimer cet utilisateur ?")) {
         axios
-          .delete("/delete/certificat", {
-            data: {
-              user_id: this.certificats[index].user_id
-            }
-          })
+          .delete("/certificats/" + this.certificats[index].user_id)
           .then(() => {
             this.$router.go();
           });
@@ -184,8 +180,7 @@ export default {
       if (this.editedIndex > -1) {
         const token = localStorage.getItem("token");
         axios
-          .put("/update/certificat", {
-            user_id: this.certificats[this.editedIndex].user_id,
+          .put("/certificats/" + this.certificats[this.editedIndex].user_id, {
             date: this.editedItem.dateecheance
           })
           .then(() => {
@@ -199,7 +194,7 @@ export default {
       const token = localStorage.getItem("token");
 
       axios
-        .get("/read/certificats", {
+        .get("/certificats", {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -212,7 +207,7 @@ export default {
       const token = localStorage.getItem("token");
 
       axios
-        .get("/read/users", {
+        .get("/users", {
           headers: {
             Authorization: `Bearer ${token}`
           }
