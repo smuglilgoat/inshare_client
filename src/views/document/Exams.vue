@@ -22,7 +22,7 @@ export default {
   methods: {
     fetchDocuments() {
       axios
-        .get("/documents/type=Examination")
+        .get("/documents/category=Examination")
         .then(({ data }) => (this.docs = data.docs));
     },
     toDoc(id) {

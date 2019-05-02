@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="tile is-10 is-vertical is-parent">
     <div class="viewer-wrapper">
-      <viewer @inited="inited" class="viewer" ref="viewer">
+      <viewer :images="images" @inited="inited" class="viewer" ref="viewer">
         <template slot-scope="scope">
           <figure class="images">
-            <div class="image-wrapper">
-              <img class="image" :src="doc.link">
+            <div class="image-wrapper" v-for="image in images">
+              <img class="image" :src="image.path">
             </div>
           </figure>
         </template>
@@ -15,10 +15,23 @@
 </template>
 
 <script>
+import "viewerjs/dist/viewer.css";
+import Viewer from "v-viewer";
+import Vue from "vue";
+
+Vue.use(Viewer);
+Viewer.setDefaults({
+  zIndexInline: 2017
+});
+
 export default {
   name: "ImgViewer",
   props: {
-    doc: {}
+    doc: {},
+    images: {
+      type: Array,
+      required: true
+    }
   },
   methods: {
     inited(viewer) {
@@ -28,7 +41,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .viewer-wrapper {
   position: relative;
   background: #333;
@@ -75,5 +88,4 @@ export default {
   }
 }
 </style>
-">
-</style>
+

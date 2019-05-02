@@ -8,6 +8,7 @@
 	},
 	"dependencies": {
 		"axios": "^0.18.0",
+		"jszip": "^3.2.1",
 		"moment": "^2.24.0",
 		"v-viewer": "^1.4.0",
 		"vee-validate": "^2.2.0",

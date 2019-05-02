@@ -15,21 +15,21 @@
           <v-layout row wrap justify-space-around align-center fill-height>
             <v-flex xs10>
               <v-avatar size="40px" class="mr-2">
-                <img :src="auther.avatar">
+                <img :src="author.avatar">
               </v-avatar>
-              <v-tooltip top v-if="auther.role === 'Etudiant'">
+              <v-tooltip top v-if="author.role === 'Etudiant'">
                 <template v-slot:activator="{ on }">
-                  <v-chip color="info" v-on="on" @click="toAuthor(auther.id)">{{auther.username}}</v-chip>
+                  <v-chip color="info" v-on="on" @click="toAuthor(author.id)">{{author.username}}</v-chip>
                 </template>
                 <span>Etudiant</span>
               </v-tooltip>
-              <v-tooltip top v-else-if="auther.role === 'Enseignant'">
+              <v-tooltip top v-else-if="author.role === 'Enseignant'">
                 <template v-slot:activator="{ on }">
-                  <v-chip color="success" v-on="on" @click="toAuthor(auther.id)">{{auther.username}}</v-chip>
+                  <v-chip color="success" v-on="on" @click="toAuthor(author.id)">{{author.username}}</v-chip>
                 </template>
                 <span>Enseignant</span>
               </v-tooltip>
-              <v-chip v-else @click="toAuthor(auther.id)">{{auther.username}}</v-chip>
+              <v-chip v-else @click="toAuthor(author.id)">{{author.username}}</v-chip>
             </v-flex>
             <v-flex xs2 class="text-xs-right">
               <v-chip>{{doc.vues}} vues</v-chip>
@@ -56,7 +56,7 @@ export default {
   name: "Description",
   props: {
     doc: {},
-    auther: {}
+    author: {}
   },
   data() {
     return {};
@@ -68,18 +68,32 @@ export default {
   },
   methods: {
     download() {
-      axios
-        .get("/documents/" + this.doc.id + ".jpg", {
-          responseType: "blob"
-        })
-        .then(response => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", "" + this.doc.id + ".jpg");
-          document.body.appendChild(link);
-          link.click();
-        });
+      // axios
+      //   .get("/documents/" + this.doc.id + ".jpg", {
+      //     responseType: "blob"
+      //   })
+      //   .then(response => {
+      //     const url = window.URL.createObjectURL(new Blob([response.data]));
+      //     const link = document.createElement("a");
+      //     link.href = url;
+      //     link.setAttribute("download", "" + this.doc.id + ".jpg");
+      //     document.body.appendChild(link);
+      //     link.click();
+      //   });
+
+      var zip = new JSZip();
+      zip.folder("Hello.txt", "Hello world\n");
+
+      jQuery("#data_uri").on("click", function() {
+        zip.generateAsync({ type: "base64" }).then(
+          function(base64) {
+            window.location = "data:application/zip;base64," + base64;
+          },
+          function(err) {
+            jQuery("#data_uri").text(err);
+          }
+        );
+      });
     },
     toAuthor(id) {
       this.$router.push("/profile/" + id);

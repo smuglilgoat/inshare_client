@@ -19,6 +19,9 @@
                 <v-text-field v-model="editedItem.titre" label="Titre"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md6>
+                <v-checkbox v-model="editedItem.public" label="Public"></v-checkbox>
+              </v-flex>
+              <v-flex xs12>
                 <v-textarea v-model="editedItem.description" label="Description"></v-textarea>
               </v-flex>
               <v-flex xs12 sm6 md6>
@@ -27,10 +30,10 @@
               <v-flex xs12 sm6 md6>
                 <v-text-field v-model="editedItem.domaine" label="Domaine"></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md6>
-                <v-text-field v-model="editedItem.taille" label="Taille" readonly></v-text-field>
+              <v-flex xs12>
+                <v-text-field v-model="editedItem.type" label="Type" readonly></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md6>
+              <v-flex xs12>
                 <v-textarea v-model="editedItem.tags" label="Tags"></v-textarea>
               </v-flex>
               <v-flex xs12 sm6 md6>
@@ -61,14 +64,17 @@
       <v-progress-linear v-slot:progress color="blue" indeterminate></v-progress-linear>
       <template v-slot:items="props">
         <td>{{ props.item.id }}</td>
-        <td class="text-xs-left">{{ props.item.user_id }}</td>
+        <td class="text-xs-left">{{ users.get(props.item.user_id) }}</td>
         <td class="text-xs-left">
-          <a :href="`${props.item.link}`" target="_blank">Cliquez</a>
+          <router-link
+            :to="{ name: 'document', params: { id: props.item.id }}"
+          >{{ props.item.titre }}</router-link>
         </td>
-        <td class="text-xs-left">{{ props.item.titre }}</td>
-        <td class="text-xs-left">{{ props.item.description }}</td>
-        <td class="text-xs-left">{{ props.item.langue }}</td>
-        <td class="text-xs-left">{{ props.item.taille }}</td>
+        <td class="text-xs-left">
+          <v-chip color="success" v-if="props.item.public != 0">Oui</v-chip>
+          <v-chip color="error" v-else>Non</v-chip>
+        </td>
+        <td class="text-xs-left">{{ props.item.type }}</td>
         <td class="text-xs-left">{{ props.item.domaine }}</td>
         <td class="text-xs-left">{{ props.item.tags }}</td>
         <td class="text-xs-left">{{ props.item.evaluation }}</td>
@@ -116,14 +122,13 @@ export default {
       dialog: false,
       loading: true,
       documents: [],
+      users: new Map(),
       headers: [
         { text: "ID", align: "left", value: "id" },
         { text: "Utilisateur", value: "user_id" },
-        { text: "Lien", value: "link" },
         { text: "Titre", value: "titre" },
-        { text: "Description", value: "description" },
-        { text: "Langue", value: "langue" },
-        { text: "Taille", value: "taille" },
+        { text: "Public", value: "public" },
+        { text: "Type", value: "type" },
         { text: "Domaine", value: "domaine" },
         { text: "Tags", value: "tags" },
         { text: "Evaluation", value: "evaluation" },
@@ -134,10 +139,10 @@ export default {
       editedItem: {
         id: "",
         user_id: "",
-        link: "",
+        public: "",
         titre: "",
         description: "",
-        taille: "",
+        type: "",
         domaine: "",
         tags: "",
         evaluation: "",
@@ -146,17 +151,17 @@ export default {
       defaultItem: {
         id: "",
         user_id: "",
-        link: "",
+        public: "",
         titre: "",
         description: "",
-        taille: "",
+        type: "",
         domaine: "",
         tags: "",
         evaluation: "",
         vues: ""
       },
       langue: ["Arabe", "Anglais", "Français"],
-      type: [
+      categorie: [
         "Support de Cours",
         "Note de Cours",
         "Série de TD",
@@ -170,8 +175,9 @@ export default {
       val || this.close();
     }
   },
-  mounted() {
+  created() {
     this.fetchDocuments();
+    this.fetchUsers();
   },
   methods: {
     editItem(item) {
@@ -192,6 +198,7 @@ export default {
           .put(
             "/documents/" + this.documents[this.editedIndex].id,
             {
+              public: this.editedItem.public,
               titre: this.editedItem.titre,
               description: this.editedItem.description,
               langue: this.editedItem.langue,
@@ -230,6 +237,21 @@ export default {
         })
         .then(({ data }) => {
           this.documents = data.docs;
+        });
+    },
+    fetchUsers() {
+      const token = localStorage.getItem("token");
+
+      axios
+        .get("/users", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(({ data }) => {
+          data.users.forEach(e => {
+            this.users.set(e.id, e.username);
+          });
           this.loading = false;
         });
     }

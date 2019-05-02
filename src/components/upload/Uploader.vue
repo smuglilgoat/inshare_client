@@ -31,7 +31,7 @@
       <v-container fluid fill-height>
         <v-layout row wrap align-center>
           <v-flex md3 lg2 xl1>
-            <v-img :src="document.link" aspect-ratio="1" contain min-width="170px"></v-img>
+            <v-img :src="images[0].path" aspect-ratio="1" contain min-width="170px"></v-img>
           </v-flex>
           <v-flex grow>
             <v-text-field label="Titre" v-model="form.titre"></v-text-field>
@@ -40,7 +40,7 @@
           <v-flex grow>
             <v-text-field label="Domaine" v-model="form.domaine"></v-text-field>
             <v-select :items="langue" label="Langue" v-model="form.langue"></v-select>
-            <v-select :items="type" label="Type" v-model="form.type"></v-select>
+            <v-select :items="categorie" label="Categorie" v-model="form.categorie"></v-select>
           </v-flex>
         </v-layout>
       </v-container>
@@ -80,11 +80,11 @@ export default {
         titre: "",
         description: "",
         langue: "",
-        type: "",
+        categorie: "",
         domaine: ""
       },
       langue: ["Arabe", "Anglais", "Français"],
-      type: [
+      categorie: [
         "Support de Cours",
         "Note de Cours",
         "Série de TD",
@@ -92,6 +92,7 @@ export default {
         "Examination"
       ],
       document: {},
+      images: null,
       uploadedFiles: [],
       uploadError: null,
       currentStatus: null,
@@ -129,6 +130,9 @@ export default {
       this.upload(formData)
         .then(x => {
           this.document = x.data.document;
+          axios
+            .get("/documents/" + this.document.id + "/images")
+            .then(data => (this.images = data.data.images.slice()));
           this.currentStatus = STATUS_SUCCESS;
         })
         .catch(err => {
@@ -143,7 +147,7 @@ export default {
       if (!fileList.length) return;
 
       for (let index = 0; index < fileList.length; index++) {
-        formData.append("file_" + index, fileList[index], fileList[index].name);
+        formData.append("file", fileList[index], fileList[index].name);
       }
 
       this.save(formData);
@@ -181,7 +185,7 @@ export default {
             titre: this.form.titre,
             description: this.form.description,
             langue: this.form.langue,
-            type: this.form.type,
+            categorie: this.form.categorie,
             domaine: this.form.domaine
           },
           {

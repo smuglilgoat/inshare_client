@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ImgViewer :doc="doc"/>
-    <Description :doc="doc" :auther="auther"/>
+    <ImgViewer :doc="doc" :images="images"/>
+    <Description :doc="doc" :author="author"/>
   </div>
 </template>
 
@@ -16,10 +16,10 @@ export default {
   data() {
     return {
       doc: {},
-      auther: {}
+      author: {},
+      images: []
     };
   },
-
   created() {
     this.fetchDocument();
   },
@@ -27,13 +27,16 @@ export default {
     fetchDocument() {
       axios
         .get("/documents/" + this.$route.params.id)
-        .then(({ data }) => {
-          this.doc = data.document;
-        })
+        .then(({ data }) => (this.doc = data.document))
         .then(() => {
           axios
             .get("/users/" + this.doc.user_id)
-            .then(({ data }) => (this.auther = data.user));
+            .then(({ data }) => (this.author = data.user))
+            .then(
+              axios
+                .get("/documents/" + this.doc.id + "/images")
+                .then(data => (this.images = data.data.images.slice()))
+            );
         });
     }
   }
