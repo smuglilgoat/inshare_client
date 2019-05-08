@@ -59,6 +59,11 @@ export default new Router({
 			path: '/documents/exams',
 			name: 'exams',
 			component: () => import('./views/document/Exams.vue')
+		},
+		{
+			path: '/documents/exos',
+			name: 'exos',
+			component: () => import('./views/document/Exos.vue')
 		}
 	]
 });

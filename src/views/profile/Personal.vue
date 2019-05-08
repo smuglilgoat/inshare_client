@@ -7,13 +7,7 @@
       <v-flex sm4>
         <Role :user="user"/>
       </v-flex>
-      <v-flex sm4>
-        <Docs :user="user"/>
-      </v-flex>
-      <v-flex sm4>
-        <Docs :user="user"/>
-      </v-flex>
-      <v-flex sm4>
+      <v-flex xs12>
         <Docs :user="user"/>
       </v-flex>
     </v-layout>

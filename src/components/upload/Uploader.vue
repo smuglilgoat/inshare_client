@@ -169,7 +169,7 @@ export default {
     cancel() {
       const token = localStorage.getItem("token");
       axios
-        .delete("/documents/" + this.document.id, {
+        .delete("/documents/doc=" + this.document.id, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -180,7 +180,7 @@ export default {
       const token = localStorage.getItem("token");
       axios
         .put(
-          "/documents/" + this.document.id,
+          "/documents/doc=" + this.document.id,
           {
             titre: this.form.titre,
             description: this.form.description,

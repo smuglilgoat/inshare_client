@@ -29,7 +29,7 @@
             <v-list-tile-title>Cours</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="/">
+        <v-list-tile to="/documents/exos">
           <v-list-tile-action>
             <v-icon>collections_bookmark</v-icon>
           </v-list-tile-action>
@@ -43,6 +43,16 @@
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Sujets d'examins</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-divider v-if="isAdmin"></v-divider>
+        <v-subheader inset v-if="isAdmin">Administration</v-subheader>
+        <v-list-tile to="/admin" v-if="isAdmin">
+          <v-list-tile-action>
+            <v-icon>dashboard</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Dashboard</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -120,9 +130,6 @@
     </v-content>
     <v-footer app fixed text-md-center>
       <span class="mr-2">&copy;2019</span>
-      <router-link to="/admin" v-if="isAdmin">
-        <a>Panneau d'administration</a>
-      </router-link>
     </v-footer>
   </v-app>
 </template>

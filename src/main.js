@@ -7,10 +7,13 @@ import axios from 'axios';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import 'viewerjs/dist/viewer.css';
+import '@mdi/font/css/materialdesignicons.css';
 import Viewer from 'v-viewer';
 
 Vue.use(Viewer);
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+	iconfont: 'mdi'
+});
 window.axios = axios;
 axios.defaults.baseURL = 'http://127.0.0.1:3333';
 const token = localStorage.getItem('token');

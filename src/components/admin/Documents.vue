@@ -196,7 +196,7 @@ export default {
 
         axios
           .put(
-            "/documents/" + this.documents[this.editedIndex].id,
+            "/documents/doc=" + this.documents[this.editedIndex].id,
             {
               public: this.editedItem.public,
               titre: this.editedItem.titre,
@@ -221,7 +221,7 @@ export default {
     deleteUser(item) {
       const index = this.documents.indexOf(item);
       if (confirm("Est-vous sûr de vouloir supprimer ce document ?")) {
-        axios.delete("/documents/" + this.documents[index].id).then(() => {
+        axios.delete("/documents/doc=" + this.documents[index].id).then(() => {
           this.$router.go();
         });
       }
