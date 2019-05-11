@@ -108,7 +108,7 @@
               <v-list-tile-title>Thème</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-divider></v-divider>
+          <v-divider v-if="isLoggedIn"></v-divider>
           <v-list-tile @click="logout" ripple="ripple" rel="noopener">
             <v-list-tile-action>
               <v-icon>power_settings_new</v-icon>

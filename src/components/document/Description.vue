@@ -30,6 +30,9 @@
       <v-toolbar card flat dense color="primary">
         <v-toolbar-title>{{doc.titre}}</v-toolbar-title>
         <v-spacer></v-spacer>
+        {{doc.evaluation}}
+        <v-icon class="ml-1">stars</v-icon>
+
         <v-btn flat icon @click="reportDialog" v-if="isLoggedIn">
           <v-icon>report</v-icon>
         </v-btn>
@@ -70,6 +73,7 @@
             <v-flex text-xs-center text-sm-right>
               <v-rating
                 v-if="isLoggedIn"
+                v-model="rating"
                 style="margin-right: 0px"
                 background-color="orange lighten-3"
                 color="orange"
@@ -83,8 +87,13 @@
 </template>
 
 <script>
+import StarRating from "vue-star-rating";
+
 export default {
   name: "Description",
+  components: {
+    StarRating
+  },
   props: {
     doc: {},
     author: {}
@@ -104,12 +113,31 @@ export default {
         "Ce document contient un contenu inapproprié",
         "Je suis l'auteur de ce document et je souhaite le retirer",
         "Autre ..."
-      ]
+      ],
+      rating: null
     };
   },
   watch: {
     dialog(val) {
       val || this.close();
+    },
+    rating(val) {
+      const token = localStorage.getItem("token");
+
+      axios
+        .post(
+          "/documents/" + this.doc.id + "/rate",
+          {
+            rating: val
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        .then(() => this.$router.go())
+        .catch(error => console.log(error));
     }
   },
   computed: {
@@ -166,6 +194,23 @@ export default {
     },
     toAuthor(id) {
       this.$router.push("/profile/" + id);
+    },
+    rateDoc() {
+      const token = localStorage.getItem("token");
+
+      axios
+        .post(
+          "/documents/" + this.doc.id + "/rate",
+          {
+            rating: this.rating
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        .then(() => this.$router.go());
     }
   }
 };
