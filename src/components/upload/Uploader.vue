@@ -42,6 +42,14 @@
             <v-select :items="langue" label="Langue" v-model="form.langue"></v-select>
             <v-select :items="categorie" label="Categorie" v-model="form.categorie"></v-select>
           </v-flex>
+          <v-flex xs12 offset-sm1>
+            <v-textarea
+              label="Tags"
+              v-model="form.tags"
+              flat
+              placeholder="Les tags doivent êtres séparés par des espaces"
+            ></v-textarea>
+          </v-flex>
         </v-layout>
       </v-container>
       <v-container fluid grid-list-xs fill-height text-xs-right>
@@ -81,7 +89,8 @@ export default {
         description: "",
         langue: "",
         categorie: "",
-        domaine: ""
+        domaine: "",
+        tags: ""
       },
       langue: ["Arabe", "Anglais", "Français"],
       categorie: [
@@ -186,7 +195,8 @@ export default {
             description: this.form.description,
             langue: this.form.langue,
             categorie: this.form.categorie,
-            domaine: this.form.domaine
+            domaine: this.form.domaine,
+            tags: this.form.tags
           },
           {
             headers: {
