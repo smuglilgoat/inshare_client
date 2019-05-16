@@ -9,7 +9,9 @@ import 'vuetify/dist/vuetify.min.css';
 import 'viewerjs/dist/viewer.css';
 import '@mdi/font/css/materialdesignicons.css';
 import Viewer from 'v-viewer';
+import VoerroTagsInput from '@voerro/vue-tagsinput';
 
+Vue.component('tags-input', VoerroTagsInput);
 Vue.use(Viewer);
 Vue.use(Vuetify, {
 	iconfont: 'mdi'
