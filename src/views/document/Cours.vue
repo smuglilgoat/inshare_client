@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Séries</h1>
+    <h1>Cours</h1>
     <div v-if="loading">
       <v-layout fill-height align-center justify-center ma-0>
         <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     fetchDocuments() {
-      axios.get("/documents/category=Serie_de_TP").then(({ data }) => {
+      axios.get("/documents/category=Note_de_Cours").then(({ data }) => {
         let docs = data.docs;
         docs.forEach(doc => {
           axios
@@ -82,7 +82,7 @@ export default {
         });
         this.docs = docs;
       });
-      axios.get("/documents/category=Serie_de_TD").then(({ data }) => {
+      axios.get("/documents/category=Support_de_Cours").then(({ data }) => {
         let docs = data.docs;
         docs.forEach(doc => {
           axios

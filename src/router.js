@@ -64,6 +64,17 @@ export default new Router({
 			path: '/documents/exos',
 			name: 'exos',
 			component: () => import('./views/document/Exos.vue')
+		},
+		,
+		{
+			path: '/documents/cours',
+			name: 'cours',
+			component: () => import('./views/document/Cours.vue')
+		},
+		{
+			path: '/search',
+			name: 'search',
+			component: () => import('./views/Search.vue')
 		}
 	]
 });

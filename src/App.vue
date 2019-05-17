@@ -19,9 +19,17 @@
             <v-list-tile-title>Groupe</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile to="/search">
+          <v-list-tile-action>
+            <v-icon>search</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Recherche</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
         <v-divider></v-divider>
         <v-subheader inset>Documents</v-subheader>
-        <v-list-tile to="/">
+        <v-list-tile to="/documents/cours">
           <v-list-tile-action>
             <v-icon>school</v-icon>
           </v-list-tile-action>
