@@ -24,6 +24,11 @@
         <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
       </v-layout>
     </div>
+    <div v-if="docs.length == 0 && !loading">
+      <v-layout fill-height align-center justify-center ma-0>
+        <i>Aucun résultat</i>
+      </v-layout>
+    </div>
     <v-container grid-list-xs v-else>
       <v-layout row wrap>
         <v-flex
@@ -112,7 +117,7 @@ export default {
           }
         })
         .then(({ data }) => {
-          this.docs = data.docs[0];
+          this.docs = data.result;
           this.docs.forEach(doc => {
             axios
               .get("/documents/" + doc.id + "/images")

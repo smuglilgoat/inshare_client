@@ -55,12 +55,28 @@
         </v-list-tile>
         <v-divider v-if="isAdmin"></v-divider>
         <v-subheader inset v-if="isAdmin">Administration</v-subheader>
-        <v-list-tile to="/admin" v-if="isAdmin">
+        <v-list-tile to="/admin/users" v-if="isAdmin">
           <v-list-tile-action>
             <v-icon>dashboard</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Dashboard</v-list-tile-title>
+            <v-list-tile-title>Utilisateurs</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile to="/admin/certificats" v-if="isAdmin">
+          <v-list-tile-action>
+            <v-icon>dashboard</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Certificats</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile to="/admin/documents" v-if="isAdmin">
+          <v-list-tile-action>
+            <v-icon>dashboard</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Documents</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>

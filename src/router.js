@@ -41,9 +41,19 @@ export default new Router({
 			component: () => import('./views/managment/Account.vue')
 		},
 		{
-			path: '/admin',
-			name: 'administration',
-			component: () => import('./views/managment/Admin.vue')
+			path: '/admin/documents',
+			name: 'admin documents',
+			component: () => import('./views/managment/admin/Documents.vue')
+		},
+		{
+			path: '/admin/users',
+			name: 'admin users',
+			component: () => import('./views/managment/admin/Users.vue')
+		},
+		{
+			path: '/admin/certificats',
+			name: 'admin certificats',
+			component: () => import('./views/managment/admin/Certificats.vue')
 		},
 		{
 			path: '/upload',
