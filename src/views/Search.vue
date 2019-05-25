@@ -1,35 +1,67 @@
 <template>
   <div>
     <h1>Search</h1>
-    <v-container grid-list-xs>
-      <v-layout wrap>
-        <v-flex xs12 sm11>
-          <tags-input
-            element-id="tags"
-            v-model="selectedTags"
-            :existing-tags="existingTags"
-            :typeahead="true"
-            :only-existing-tags="true"
-          ></tags-input>
-        </v-flex>
-        <v-flex xs12 sm1 text-xs-right>
-          <v-btn color="primary" @click="fetchDocuments()">
-            <v-icon>search</v-icon>
-          </v-btn>
-        </v-flex>
-      </v-layout>
-    </v-container>
-    <div v-if="loading">
+    <v-layout row>
+      <v-flex xs8 sm10>
+        <tags-input
+          element-id="tags"
+          v-model="selectedTags"
+          :existing-tags="existingTags"
+          :typeahead="true"
+          :only-existing-tags="true"
+        ></tags-input>
+      </v-flex>
+      <v-flex xs2 text-xs-center sm1 text-sm-right>
+        <v-btn color="primary" @click="fetchDocuments()" icon>
+          <v-icon>search</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex xs2 text-xs-center sm1 text-sm-right>
+        <v-btn icon color="primary" @click="changeView" :disabled="docs.length == 0">
+          <v-icon v-if="viewCards">view_list</v-icon>
+          <v-icon v-if="viewList">view_module</v-icon>
+        </v-btn>
+      </v-flex>
+    </v-layout>
+
+    <div v-if="isInitial || isLoading">
       <v-layout fill-height align-center justify-center ma-0>
         <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
       </v-layout>
     </div>
-    <div v-if="docs.length == 0 && !loading">
+
+    <div v-if="!isInitial && !isLoading && docs.length == 0">
       <v-layout fill-height align-center justify-center ma-0>
-        <i>Aucun résultat</i>
+        <i>Aucun document :'(</i>
       </v-layout>
     </div>
-    <v-container grid-list-xs v-else>
+
+    <div v-if="isSuccess && viewList && docs.length != 0">
+      <v-list two-line>
+        <v-list-tile avatar v-for="doc in docs" :key="doc.created_at" @click="toDoc(doc.id)">
+          <v-list-tile-avatar>
+            <v-icon v-if="doc.type == 'Image'">photo_library</v-icon>
+            <v-icon v-if="doc.type == 'Video'">video_library</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title>{{doc.titre}}</v-list-tile-title>
+            <v-list-tile-sub-title class="text--primary">{{users.get(doc.user_id)}}</v-list-tile-sub-title>
+            <v-list-tile-sub-title>{{doc.description}}</v-list-tile-sub-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-list-tile-action-text>
+              {{doc.vues}}
+              <v-icon small>remove_red_eye</v-icon>
+              <br>
+              {{doc.evaluation}}
+              <v-icon small>stars</v-icon>
+            </v-list-tile-action-text>
+          </v-list-tile-action>
+        </v-list-tile>
+      </v-list>
+    </div>
+
+    <div v-if="isSuccess && viewCards">
       <v-layout row wrap>
         <v-flex
           xs12
@@ -38,9 +70,19 @@
           v-for="doc in docs"
           :key="doc.created_at"
           @click="toDoc(doc.id)"
-          class="grow"
+          grow
+          style="margin-left: 2px"
+          v-if="show"
         >
           <v-card>
+            <div class="embed-container" v-if="doc.type == 'Video'">
+              <iframe
+                :src="'https://www.youtube.com/embed/' + doc.preview"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              ></iframe>>
+            </div>
+
             <v-img
               height="200"
               contain
@@ -48,6 +90,7 @@
               transition="fade-transition"
               aspect-ratio="1"
               class="grey darken-4"
+              v-if="doc.type == 'Image'"
             >
               <template v-slot:placeholder>
                 <v-layout fill-height align-center justify-center ma-0>
@@ -77,11 +120,18 @@
           </v-card>
         </v-flex>
       </v-layout>
-    </v-container>
+    </div>
   </div>
 </template>
 
 <script>
+const STATUS_INITIAL = 0,
+  STATUS_LOADING = 1,
+  STATUS_SUCCESS = 2;
+
+const VIEW_LIST = 0,
+  VIEW_CARDS = 1;
+
 export default {
   data() {
     return {
@@ -89,13 +139,45 @@ export default {
       existingTags: null,
       docs: [],
       users: new Map(),
-      loading: true
+      currentStatus: null,
+      currentView: 0,
+      show: true
     };
   },
   created() {
+    this.currentStatus = STATUS_INITIAL;
     this.fetchTags();
   },
+  computed: {
+    isInitial() {
+      return this.currentStatus === STATUS_INITIAL;
+    },
+    isSuccess() {
+      return this.currentStatus === STATUS_SUCCESS;
+    },
+    isLoading() {
+      return this.currentStatus === STATUS_LOADING;
+    },
+    viewList() {
+      return this.currentView === VIEW_LIST;
+    },
+    viewCards() {
+      return this.currentView === VIEW_CARDS;
+    }
+  },
   methods: {
+    changeView() {
+      if (this.viewCards) {
+        this.currentView = VIEW_LIST;
+      } else {
+        this.currentView = VIEW_CARDS;
+      }
+      this.show = false;
+      this.$nextTick(() => {
+        this.show = true;
+        this.$nextTick(() => {});
+      });
+    },
     fetchTags() {
       axios.get("/tags").then(({ data }) => {
         let tagList = "{ ";
@@ -110,6 +192,8 @@ export default {
       });
     },
     fetchDocuments() {
+      this.currentView = VIEW_LIST;
+
       axios
         .get("/documents/query", {
           params: {
@@ -119,19 +203,29 @@ export default {
         .then(({ data }) => {
           this.docs = data.result;
           this.docs.forEach(doc => {
-            axios
-              .get("/documents/" + doc.id + "/images")
-              .then(data => (doc.preview = data.data.images[0].path));
+            switch (doc.type) {
+              case "Image":
+                axios
+                  .get("/documents/" + doc.id + "/images")
+                  .then(data => (doc.preview = data.data.images[0].path));
+                break;
+              case "Video":
+                axios
+                  .get("/documents/" + doc.id + "/video")
+                  .then(data => (doc.preview = data.data.video.link));
+                break;
+              default:
+                break;
+            }
           });
         });
       axios.get("/users-list").then(({ data }) => {
         data.users.forEach(e => {
           this.users.set(e.id, e.username);
         });
-        this.$forceUpdate();
-        this.loading = false;
       });
       this.selectedTags = [];
+      this.currentStatus = STATUS_SUCCESS;
     },
     toDoc(id) {
       this.$router.push("/documents/view/" + id);
@@ -141,6 +235,39 @@ export default {
 </script>
 
 <style>
+.grow {
+  -webkit-transition: all 0.5s ease-out;
+  -moz-transition: all 0.5s ease-out;
+  -ms-transition: all 0.5s ease-out;
+  -o-transition: all 0.5s ease-out;
+  transition: all 0.5s ease-out;
+  z-index: 1;
+}
+
+.grow:hover {
+  -webkit-transform: scale(1.0125);
+  -moz-transform: scale(1.0125);
+  -ms-transform: scale(1.0125);
+  -o-transform: scale(1.0125);
+  transform: scale(1.0125);
+  z-index: 1;
+}
+.embed-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+}
+.embed-container iframe,
+.embed-container object,
+.embed-container embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 /* The input */
 .tags-input {
   display: flex;

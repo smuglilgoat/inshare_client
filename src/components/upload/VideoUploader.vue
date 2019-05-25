@@ -6,22 +6,30 @@
       <v-btn color="primary" @click="reset()">Réessayer</v-btn>
     </div>
 
-    <form enctype="multipart/form-data" novalidate v-if="isInitial">
-      <div class="dropbox">
-        <input
-          type="file"
-          multiple
-          :disabled="isSaving"
-          @change="filesChange($event.target.files)"
-          accept="image/*"
-          class="input-file"
-        >
-        <p>
-          Glissez et déposez vos fichiers pour commencer
-          <br>ou cliquez pour parcourir
-        </p>
-      </div>
-    </form>
+    <!--INITIAL-->
+    <div v-if="isInitial">
+      <v-card>
+        <v-toolbar card flat dense color="primary">
+          <v-toolbar-title>Entrez le lien de la vidéo...</v-toolbar-title>
+        </v-toolbar>
+        <v-container grid-list-xs>
+          <v-layout row wrap>
+            <v-flex xs12>
+              <v-select
+                :items="hebergeurs"
+                v-model="form.hebergeur"
+                label="Hebergeur"
+                :disabled="isSaving"
+              ></v-select>
+              <v-text-field v-model="form.lien" label="Lien" :disabled="isSaving"></v-text-field>
+            </v-flex>
+            <v-flex text-xs-right>
+              <v-btn color="primary" :loading="loading" :disabled="loading" @click="save()">Envoyer</v-btn>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+    </div>
 
     <!--SUCCESS-->
     <v-card v-if="isSuccess || isSaving">
@@ -30,8 +38,14 @@
       </v-toolbar>
       <v-container fluid fill-height>
         <v-layout row wrap align-center>
-          <v-flex md3 lg2 xl1>
-            <v-img :src="images[0].path" aspect-ratio="1" contain min-width="170px"></v-img>
+          <v-flex xs12>
+            <div class="embed-container">
+              <iframe
+                :src="'https://www.youtube.com/embed/' + link"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              ></iframe>
+            </div>
           </v-flex>
           <v-flex grow>
             <v-text-field label="Titre" v-model="form.titre"></v-text-field>
@@ -54,10 +68,6 @@
       </v-container>
       <v-container fluid grid-list-xs fill-height text-xs-right>
         <v-layout row wrap>
-          <v-flex xs12>
-            <v-progress-linear v-model="uploadPercentage" v-if="!isSuccess"></v-progress-linear>
-          </v-flex>
-          <v-spacer></v-spacer>
           <v-flex>
             <v-btn color="error" @click="cancel" :disabled="!isSuccess">Annuler</v-btn>
             <v-btn color="success" @click="update" :disabled="!isSuccess">Envoyer</v-btn>
@@ -70,7 +80,6 @@
 
 <script>
 import Alert from "@/components/Alert";
-import { log } from "util";
 
 const STATUS_INITIAL = 0,
   STATUS_SAVING = 1,
@@ -78,15 +87,19 @@ const STATUS_INITIAL = 0,
   STATUS_FAILED = 3;
 
 export default {
-  name: "Uploader",
+  name: "VideoUploader",
   components: {
     Alert
   },
   data() {
     return {
+      loading: false,
+      hebergeurs: ["YouTube"],
       selectedTags: [],
       existingTags: null,
       form: {
+        hebergeur: "",
+        lien: "",
         titre: "",
         description: "",
         langue: "",
@@ -95,18 +108,15 @@ export default {
       },
       langue: ["Arabe", "Anglais", "Français"],
       categorie: [
-        "Support_de_Cours",
-        "Note_de_Cours",
-        "Serie_de_TD",
-        "Serie_de_TP",
-        "Examination"
+        { text: "Support de Cours", value: "Support_de_Cours" },
+        { text: "Note de Cours", value: "Note_de_Cours" },
+        { text: "Serie de TD", value: "Serie_de_TD" },
+        { text: "Serie de TP", value: "Serie_de_TP" },
+        { text: "Examination", value: "Examination" }
       ],
       document: {},
-      images: null,
-      uploadedFiles: [],
-      uploadError: null,
+      link: "",
       currentStatus: null,
-      uploadPercentage: 0,
       alert: {
         type: "",
         message: ""
@@ -124,6 +134,7 @@ export default {
       tagList = tagList + "}";
       tagList = JSON.parse(tagList);
       this.existingTags = tagList;
+      this.reset();
     });
   },
   computed: {
@@ -143,19 +154,19 @@ export default {
   methods: {
     reset() {
       this.currentStatus = STATUS_INITIAL;
-      this.uploadedFiles = [];
       this.alert.type = null;
       this.alert.message = null;
     },
-    save(formData) {
+    save() {
+      this.loading = true;
       this.currentStatus = STATUS_SAVING;
 
-      this.upload(formData)
+      this.upload()
         .then(x => {
           this.document = x.data.document;
           axios
-            .get("/documents/" + this.document.id + "/images")
-            .then(data => (this.images = data.data.images.slice()));
+            .get("/documents/" + this.document.id + "/video")
+            .then(data => (this.link = data.data.video.link));
           this.currentStatus = STATUS_SUCCESS;
         })
         .catch(err => {
@@ -164,30 +175,17 @@ export default {
           this.currentStatus = STATUS_FAILED;
         });
     },
-    filesChange(fileList) {
-      const formData = new FormData();
-
-      if (!fileList.length) return;
-
-      for (let index = 0; index < fileList.length; index++) {
-        formData.append("file", fileList[index], fileList[index].name);
-      }
-
-      this.save(formData);
-    },
-    upload(formData) {
+    upload() {
       const token = localStorage.getItem("token");
-      return axios.post("/documents", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`
-        },
-        onUploadProgress: function(progressEvent) {
-          this.uploadPercentage = parseInt(
-            Math.round((progressEvent.loaded * 100) / progressEvent.total)
-          );
-        }.bind(this)
-      });
+      return axios.post(
+        "/documents/create/t=video",
+        { provider: this.form.hebergeur, link: this.form.lien },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
     },
     cancel() {
       const token = localStorage.getItem("token");
@@ -220,48 +218,11 @@ export default {
         )
         .then(() => this.$router.push("/"));
     }
-  },
-  mounted() {
-    this.reset();
   }
 };
 </script>
 
-<style lang="scss">
-.dropbox {
-  outline: 2px dashed grey; /* the dash box */
-  outline-offset: -10px;
-  color: dimgray;
-  padding: 10px 10px;
-  min-height: 200px; /* minimum height */
-  position: relative;
-  cursor: pointer;
-}
-
-.input-file {
-  opacity: 0; /* invisible but it's there! */
-  width: 100%;
-  height: 200px;
-  position: absolute;
-  cursor: pointer;
-}
-
-.dropbox:hover {
-  background: #ffffff; /* when mouse over to the drop zone, change color */
-}
-
-.dropbox p {
-  font-size: 1.2em;
-  text-align: center;
-  padding: 50px 0;
-}
-
-@media screen and (max-width: 840px) {
-  .stupidflex {
-    margin-left: 7%;
-  }
-}
-
+<style>
 /* The input */
 .tags-input {
   display: flex;
@@ -380,5 +341,22 @@ export default {
 .tags-input-typeahead-item-highlighted-default {
   color: #fff;
   background-color: #007bff;
+}
+
+.embed-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+}
+.embed-container iframe,
+.embed-container object,
+.embed-container embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 </style>
