@@ -11,14 +11,6 @@
             <v-list-tile-title>Acceuil</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="/">
-          <v-list-tile-action>
-            <v-icon>group</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Groupe</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
         <v-list-tile to="/search">
           <v-list-tile-action>
             <v-icon>search</v-icon>
@@ -85,7 +77,7 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>
         <i class="fas fa-book-open"></i>
-        PFE
+        inShare
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn outline color="primary" to="/upload" v-if="isLoggedIn">

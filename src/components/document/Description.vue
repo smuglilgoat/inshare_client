@@ -36,7 +36,13 @@
         <v-btn flat icon @click="reportDialog" v-if="isLoggedIn">
           <v-icon>report</v-icon>
         </v-btn>
-        <v-btn flat icon @click="download" v-if="isLoggedIn" style="margin-left: 0px">
+        <v-btn
+          flat
+          icon
+          @click="download"
+          v-if="isLoggedIn && doc.type != 'Video'"
+          style="margin-left: 0px"
+        >
           <v-icon>get_app</v-icon>
         </v-btn>
       </v-toolbar>

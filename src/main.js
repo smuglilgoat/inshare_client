@@ -10,11 +10,15 @@ import 'viewerjs/dist/viewer.css';
 import '@mdi/font/css/materialdesignicons.css';
 import Viewer from 'v-viewer';
 import VoerroTagsInput from '@voerro/vue-tagsinput';
+import colors from 'vuetify/es5/util/colors';
 
 Vue.component('tags-input', VoerroTagsInput);
 Vue.use(Viewer);
 Vue.use(Vuetify, {
-	iconfont: 'mdi'
+	iconfont: 'mdi',
+	theme: {
+		primary: colors.blue.darken3
+	}
 });
 window.axios = axios;
 axios.defaults.baseURL = 'http://127.0.0.1:3333';

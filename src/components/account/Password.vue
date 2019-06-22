@@ -17,7 +17,9 @@
         type="password"
         v-model="newpassword"
       ></v-text-field>
-      <v-btn color="info" @click="updatePassword">Envoyer</v-btn>
+      <v-flex text-xs-right>
+        <v-btn color="primary" @click="updatePassword">Envoyer</v-btn>
+      </v-flex>
     </v-form>
     <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
   </div>

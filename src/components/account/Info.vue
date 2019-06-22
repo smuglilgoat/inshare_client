@@ -8,10 +8,15 @@
         prepend-icon="person"
         v-model="user.username"
       ></v-text-field>
-      <v-btn color="primary" @click="updateUsername">Envoyer</v-btn>
+      <v-flex text-xs-right>
+        <v-btn color="primary" @click="updateUsername">Envoyer</v-btn>
+      </v-flex>
+      <br>
       <v-divider></v-divider>
       <v-text-field name="email" label="Email" id="email" prepend-icon="email" v-model="user.email"></v-text-field>
-      <v-btn color="primary" @click="updateEmail">Envoyer</v-btn>
+      <v-flex text-xs-right>
+        <v-btn color="primary" @click="updateEmail">Envoyer</v-btn>
+      </v-flex>
     </v-form>
     <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
   </div>

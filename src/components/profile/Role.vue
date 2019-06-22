@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-toolbar card flat dense color="info">
+    <v-toolbar card flat dense color="primary">
       <v-toolbar-title>Certification</v-toolbar-title>
     </v-toolbar>
     <v-container fluid grid-list-md text-xs-center fill-height class="pa-0">
