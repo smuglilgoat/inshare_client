@@ -3,7 +3,7 @@
     <v-card-text>
       <v-textarea label="Commentaire" v-model="content"></v-textarea>
       <v-flex xs12 text-xs-right>
-        <v-btn color="primary" @click="commentCreate">Enovyer</v-btn>
+        <v-btn color="primary" @click="commentCreate">Envoyer</v-btn>
       </v-flex>
     </v-card-text>
   </v-card>

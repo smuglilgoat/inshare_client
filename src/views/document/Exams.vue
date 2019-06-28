@@ -5,7 +5,7 @@
         <h1>Examination</h1>
       </v-flex>
       <v-flex xs2 text-xs-right>
-        <v-btn icon color="primary" @click="changeView" :disabled="docs.length == 0">
+        <v-btn color="primary" @click="changeView" :disabled="docs.length == 0">
           <v-icon v-if="viewCards">view_list</v-icon>
           <v-icon v-if="viewList">view_module</v-icon>
         </v-btn>
@@ -15,12 +15,6 @@
     <div v-if="isInitial || isLoading">
       <v-layout fill-height align-center justify-center ma-0>
         <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-      </v-layout>
-    </div>
-
-    <div v-if="!isInitial && !isLoading && docs.length == 0">
-      <v-layout fill-height align-center justify-center ma-0>
-        <i>Aucun document :'(</i>
       </v-layout>
     </div>
 
@@ -49,6 +43,12 @@
       </v-list>
     </div>
 
+    <div v-if="isSuccess && viewList && docs.length == 0">
+      <v-layout fill-height align-center justify-center ma-0>
+        <i>Aucun document :'(</i>
+      </v-layout>
+    </div>
+
     <div v-if="isSuccess && viewCards">
       <v-layout row wrap>
         <v-flex
@@ -59,7 +59,6 @@
           :key="doc.created_at"
           @click="toDoc(doc.id)"
           grow
-          style="margin-left: 2px"
           v-if="show"
         >
           <v-card>
@@ -68,7 +67,22 @@
                 :src="'https://www.youtube.com/embed/' + doc.preview"
                 frameborder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              ></iframe>>
+                v-if="doc.provider == 'YouTube'"
+              ></iframe>
+              <iframe
+                :src="'https://player.vimeo.com/video/' + doc.preview"
+                frameborder="0"
+                allow="autoplay; fullscreen"
+                allowfullscreen
+                v-if="doc.provider == 'Vimeo'"
+              ></iframe>
+              <iframe
+                frameborder="0"
+                :src="'https://lrp.adm.dailymotion.com/embed/video/' + doc.preview"
+                allowfullscreen
+                allow="autoplay"
+                v-if="doc.provider == 'Dailymotion'"
+              ></iframe>
             </div>
 
             <v-img
@@ -125,7 +139,7 @@ export default {
     return {
       docs: [],
       users: new Map(),
-      currentStatus: null,
+      currentStatus: STATUS_INITIAL,
       currentView: 0,
       show: true
     };
@@ -134,7 +148,6 @@ export default {
     this.currentStatus = STATUS_INITIAL;
     this.fetchDocuments();
     this.fetchUsernames();
-    this.currentStatus = STATUS_SUCCESS;
   },
   computed: {
     isInitial() {
@@ -179,9 +192,10 @@ export default {
                 .then(data => (doc.preview = data.data.images[0].path));
               break;
             case "Video":
-              axios
-                .get("/documents/" + doc.id + "/video")
-                .then(data => (doc.preview = data.data.video.link));
+              axios.get("/documents/" + doc.id + "/video").then(data => {
+                doc.provider = data.data.video.provider;
+                doc.preview = data.data.video.link;
+              });
               break;
             default:
               break;
@@ -191,12 +205,13 @@ export default {
       });
     },
     fetchUsernames() {
+      this.currentStatus = STATUS_LOADING;
+
       axios.get("/users-list").then(({ data }) => {
         data.users.forEach(e => {
           this.users.set(e.id, e.username);
         });
-        this.$forceUpdate();
-        this.loading = false;
+        this.currentStatus = STATUS_SUCCESS;
       });
     },
     toDoc(id) {

@@ -83,7 +83,7 @@
       <v-btn outline color="primary" to="/upload" v-if="isLoggedIn">
         <v-icon class="mr-2">cloud_upload</v-icon>Uploader
       </v-btn>
-      <v-divider vertical inset></v-divider>
+      <v-divider vertical inset v-if="isLoggedIn"></v-divider>
 
       <v-menu
         offset-y
@@ -124,7 +124,7 @@
               <v-list-tile-title>Thème</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-divider v-if="isLoggedIn"></v-divider>
+          <v-divider></v-divider>
           <v-list-tile @click="logout" ripple="ripple" rel="noopener">
             <v-list-tile-action>
               <v-icon>power_settings_new</v-icon>
@@ -144,9 +144,6 @@
         <router-view></router-view>
       </v-container>
     </v-content>
-    <v-footer app fixed text-md-center>
-      <span class="mr-2">&copy;2019</span>
-    </v-footer>
   </v-app>
 </template>
 

@@ -41,6 +41,11 @@
                 </v-flex>
                 <v-flex xs3 text-xs-right>{{timeAgo(comment.created_at)}}</v-flex>
                 <v-flex xs12 class="mt-2">{{comment.content}}</v-flex>
+                <v-flex xs12 text-xs-right>
+                  <v-btn color="error" icon small v-if="isAdmin">
+                    <v-icon small @click="deleteComment(comment.id)">delete</v-icon>
+                  </v-btn>
+                </v-flex>
               </v-layout>
             </v-card-text>
           </v-card>
@@ -80,6 +85,11 @@ export default {
   props: {
     comments: {}
   },
+  computed: {
+    isAdmin() {
+      return this.$store.getters.isAdmin;
+    }
+  },
   created() {
     this.fetchUsers();
   },
@@ -91,6 +101,19 @@ export default {
         });
         this.loading = false;
       });
+    },
+    deleteComment(id) {
+      const token = localStorage.getItem("token");
+      axios
+        .delete(
+          "/documents/" + this.comments[0].document_id + "/comments/" + id,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        .then(this.$router.go());
     },
     toAuthor(id) {
       this.$router.push("/profile/" + id);

@@ -1,41 +1,39 @@
 <template>
-  <v-content>
-    <v-container fluid fill-height>
-      <v-layout align-center justify-center>
-        <v-flex xs12 sm8 md4>
-          <Alert :type="alert.type" :message="alert.message" v-if="alert.message"/>
-          <v-card class="elevation-12">
-            <v-toolbar dark color="primary">
-              <v-toolbar-title>Connectez-vous !</v-toolbar-title>
-            </v-toolbar>
-            <v-card-text>
-              <v-form>
-                <v-text-field
-                  prepend-icon="person"
-                  name="email"
-                  label="Email"
-                  type="email"
-                  v-model="email"
-                ></v-text-field>
-                <v-text-field
-                  prepend-icon="lock"
-                  name="password"
-                  label="Mot de Passe"
-                  type="password"
-                  v-model="password"
-                ></v-text-field>
-              </v-form>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="info" to="/auth/register">S'inscrire</v-btn>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" @click="login">Suivant</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </v-content>
+  <v-container grid-list-xs fluid fill-height text-xs-center>
+    <v-layout align-center row warp justify-center>
+      <v-flex xs12 sm8 md4>
+        <Alert :type="alert.type" :message="alert.message" v-if="alert.message"/>
+        <v-card class="elevation-12">
+          <v-toolbar dark color="primary" flat>
+            <v-toolbar-title>Connectez-vous !</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <v-form>
+              <v-text-field
+                prepend-icon="person"
+                name="email"
+                label="Email"
+                type="email"
+                v-model="email"
+              ></v-text-field>
+              <v-text-field
+                prepend-icon="lock"
+                name="password"
+                label="Mot de Passe"
+                type="password"
+                v-model="password"
+              ></v-text-field>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="info" to="/auth/register">S'inscrire</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" @click="login">Suivant</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>

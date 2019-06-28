@@ -3,6 +3,7 @@
     <v-container grid-list-xs fluid>
       <v-layout row wrap align-center justify-center>
         <v-flex xs10>
+          <v-alert value="true" type="info">Toute modification du compte entraine une deconnexion.</v-alert>
           <v-tabs centered color="primary" dark icons-and-text grow>
             <v-tabs-slider color="yellow"></v-tabs-slider>
 

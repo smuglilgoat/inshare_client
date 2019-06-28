@@ -7,7 +7,7 @@ import axios from 'axios';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import 'viewerjs/dist/viewer.css';
-import '@mdi/font/css/materialdesignicons.css';
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import Viewer from 'v-viewer';
 import VoerroTagsInput from '@voerro/vue-tagsinput';
 import colors from 'vuetify/es5/util/colors';
@@ -15,7 +15,7 @@ import colors from 'vuetify/es5/util/colors';
 Vue.component('tags-input', VoerroTagsInput);
 Vue.use(Viewer);
 Vue.use(Vuetify, {
-	iconfont: 'mdi',
+	iconfont: 'md',
 	theme: {
 		primary: colors.blue.darken3
 	}

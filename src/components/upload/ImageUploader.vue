@@ -24,20 +24,18 @@
     </form>
 
     <!--SUCCESS-->
+    <ImgViewer :document="document" :images="images" v-if="images"/>
     <v-card v-if="isSuccess || isSaving">
       <v-toolbar card flat dense color="primary">
         <v-toolbar-title>Envoie du document...</v-toolbar-title>
       </v-toolbar>
       <v-container fluid fill-height>
         <v-layout row wrap align-center>
-          <v-flex md3 lg2 xl1>
-            <v-img :src="images[0].path" aspect-ratio="1" contain min-width="170px"></v-img>
-          </v-flex>
-          <v-flex grow>
+          <v-flex xs6>
             <v-text-field label="Titre" v-model="form.titre"></v-text-field>
             <v-textarea label="Description" v-model="form.description" flat></v-textarea>
           </v-flex>
-          <v-flex grow>
+          <v-flex xs6>
             <v-text-field label="Domaine" v-model="form.domaine"></v-text-field>
             <v-select :items="langue" label="Langue" v-model="form.langue"></v-select>
             <v-select :items="categorie" label="Categorie" v-model="form.categorie"></v-select>
@@ -71,6 +69,7 @@
 <script>
 import Alert from "@/components/Alert";
 import { log } from "util";
+import ImgViewer from "@/components/document/viewers/ImgViewer";
 
 const STATUS_INITIAL = 0,
   STATUS_SAVING = 1,
@@ -80,7 +79,8 @@ const STATUS_INITIAL = 0,
 export default {
   name: "ImageUploader",
   components: {
-    Alert
+    Alert,
+    ImgViewer
   },
   data() {
     return {
@@ -280,17 +280,15 @@ export default {
 }
 
 .tags-input input[type="text"] {
-  color: #495057;
+  color: #74777a;
 }
 
 .tags-input-wrapper-default {
-  padding: 0.5rem 0.25rem;
-
-  background: #fff;
-
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-  border-color: #dbdbdb;
+  padding: 10px 10px 10px 5px;
+  background: none;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid #c6c6c6;
 }
 
 /* The tag badges & the remove icon */
@@ -331,13 +329,13 @@ export default {
 .tags-input-badge {
   display: inline-block;
   padding: 0.25em 0.4em;
-  font-size: 75%;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: 0.25rem;
+  border-radius: 28px;
 }
 
 .tags-input-badge-pill {
@@ -347,8 +345,8 @@ export default {
 }
 
 .tags-input-badge-selected-default {
-  color: #212529;
-  background-color: #f0f1f2;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #e0e0e0;
 }
 
 /* Typeahead - badges */
@@ -379,6 +377,6 @@ export default {
 
 .tags-input-typeahead-item-highlighted-default {
   color: #fff;
-  background-color: #007bff;
+  background-color: #1565c0;
 }
 </style>

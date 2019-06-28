@@ -1,11 +1,13 @@
 <template>
   <div>
     <v-form>
+      Séléctionnez une image.
+      <br>Taille maximale: 2mb
       <v-text-field label="Avatar" v-model="imageName" @click="pickFile" prepend-icon="attach_file"></v-text-field>
       <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked">
       <v-progress-linear v-model="uploadPercentage" v-show="uploadPercentage != 0"></v-progress-linear>
-      <v-flex   text-xs-right>
-        <v-btn color="primary" @click="updateAvatar">Envoyer</v-btn>
+      <v-flex text-xs-right>
+        <v-btn color="primary" @click="updateAvatar">Enregistrer</v-btn>
       </v-flex>
     </v-form>
     <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>

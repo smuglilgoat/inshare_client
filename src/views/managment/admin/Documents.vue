@@ -313,17 +313,15 @@ export default {
 }
 
 .tags-input input[type="text"] {
-  color: #495057;
+  color: #74777a;
 }
 
 .tags-input-wrapper-default {
-  padding: 0.5rem 0.25rem;
-
-  background: #fff;
-
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-  border-color: #dbdbdb;
+  padding: 10px 10px 10px 5px;
+  background: none;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid #c6c6c6;
 }
 
 /* The tag badges & the remove icon */
@@ -364,13 +362,13 @@ export default {
 .tags-input-badge {
   display: inline-block;
   padding: 0.25em 0.4em;
-  font-size: 75%;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: 0.25rem;
+  border-radius: 28px;
 }
 
 .tags-input-badge-pill {
@@ -380,8 +378,8 @@ export default {
 }
 
 .tags-input-badge-selected-default {
-  color: #212529;
-  background-color: #f0f1f2;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #e0e0e0;
 }
 
 /* Typeahead - badges */
@@ -412,7 +410,7 @@ export default {
 
 .tags-input-typeahead-item-highlighted-default {
   color: #fff;
-  background-color: #007bff;
+  background-color: #1565c0;
 }
 </style>
 

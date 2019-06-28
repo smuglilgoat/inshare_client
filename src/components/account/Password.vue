@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-form>
+      Entrez votre ancien et nouveau mot de passe.
       <v-text-field
         prepend-icon="lock"
         name="oldpassword"
@@ -18,7 +19,7 @@
         v-model="newpassword"
       ></v-text-field>
       <v-flex text-xs-right>
-        <v-btn color="primary" @click="updatePassword">Envoyer</v-btn>
+        <v-btn color="primary" @click="updatePassword">Enregistrer</v-btn>
       </v-flex>
     </v-form>
     <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>

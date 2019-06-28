@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-form>
+      Entrez votre nouveau nom d'utilisateur
       <v-text-field
         name="username"
         label="Nom d'utilisateur"
@@ -9,13 +10,14 @@
         v-model="user.username"
       ></v-text-field>
       <v-flex text-xs-right>
-        <v-btn color="primary" @click="updateUsername">Envoyer</v-btn>
+        <v-btn color="primary" @click="updateUsername">Enregistrer</v-btn>
       </v-flex>
       <br>
       <v-divider></v-divider>
+      <br>Entrez votre nouveau mail
       <v-text-field name="email" label="Email" id="email" prepend-icon="email" v-model="user.email"></v-text-field>
       <v-flex text-xs-right>
-        <v-btn color="primary" @click="updateEmail">Envoyer</v-btn>
+        <v-btn color="primary" @click="updateEmail">Enregistrer</v-btn>
       </v-flex>
     </v-form>
     <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>

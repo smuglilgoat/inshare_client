@@ -1,13 +1,19 @@
 <template>
   <div>
     <div v-if="doc.public == 0">
-      <v-layout fill-height align-center justify-center ma-0>
-        <i>Document en cours de modération...</i>
-      </v-layout>
+      <v-container fluid fill-height>
+        <v-layout align-center justify-center text-xs-center>
+          <v-flex xs12>
+            <img src="../../assets/minus-circle-solid.png" alt="Document cours de">
+            <h1>Document en cours de modération...</h1>
+            <h4>Veuilliez attendre la vérification de votre document par un modérateur</h4>
+          </v-flex>
+        </v-layout>
+      </v-container>
     </div>
     <div v-else>
       <ImgViewer :doc="doc" :images="images" v-if="doc.type == 'Image'"/>
-      <VidViewer :doc="doc" :link="link" v-if="doc.type == 'Video'"/>
+      <VidViewer :video="video" :link="video" v-if="doc.type == 'Video'"/>
       <Description :doc="doc" :author="author"/>
       <Comment :doc="doc" class="mt-2 mb-2"/>
       <Comments :comments="comments"/>
@@ -34,7 +40,7 @@ export default {
   data() {
     return {
       doc: {},
-      link: "",
+      video: {},
       author: {},
       images: [],
       comments: []
@@ -65,7 +71,7 @@ export default {
             case "Video":
               axios
                 .get("/documents/" + this.doc.id + "/video")
-                .then(data => (this.link = data.data.video.link));
+                .then(data => (this.video = data.data.video));
               break;
 
             default:

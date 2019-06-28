@@ -25,6 +25,7 @@
 <script>
 import ImageUploader from "@/components/upload/ImageUploader";
 import VideoUploader from "@/components/upload/VideoUploader";
+
 export default {
   components: {
     ImageUploader,
