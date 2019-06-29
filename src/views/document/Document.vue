@@ -13,6 +13,7 @@
     </div>
     <div v-else>
       <ImgViewer :doc="doc" :images="images" v-if="doc.type == 'Image'"/>
+      <DocViewer :doc="doc" v-if="doc.type == 'Doc' && show"/>
       <VidViewer :video="video" :link="video" v-if="doc.type == 'Video'"/>
       <Description :doc="doc" :author="author"/>
       <Comment :doc="doc" class="mt-2 mb-2"/>
@@ -24,6 +25,7 @@
 <script>
 import store from "@/store";
 import VidViewer from "@/components/document/viewers/VidViewer";
+import DocViewer from "@/components/document/viewers/DocViewer";
 import ImgViewer from "@/components/document/viewers/ImgViewer";
 import Description from "@/components/document/Description";
 import Comments from "@/components/document/comment/Comments";
@@ -32,6 +34,7 @@ import Comment from "@/components/document/comment/Comment";
 export default {
   components: {
     ImgViewer,
+    DocViewer,
     VidViewer,
     Description,
     Comments,
@@ -43,7 +46,8 @@ export default {
       video: {},
       author: {},
       images: [],
-      comments: []
+      comments: [],
+      show: false
     };
   },
   created() {
@@ -74,6 +78,12 @@ export default {
                 .then(data => (this.video = data.data.video));
               break;
 
+            case "Doc":
+              axios.get("/documents/" + this.doc.id + "/doc").then(data => {
+                this.doc.path = data.data.doc.path;
+                this.show = true;
+              });
+              break;
             default:
               break;
           }

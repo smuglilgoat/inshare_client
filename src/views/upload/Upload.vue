@@ -16,6 +16,8 @@
         </v-flex>
         <v-flex xs12 v-if="type == 'Video'">
           <VideoUploader/>
+        </v-flex><v-flex xs12 v-if="type == 'Doc'">
+          <DocUploader/>
         </v-flex>
       </v-layout>
     </v-container>
@@ -25,16 +27,18 @@
 <script>
 import ImageUploader from "@/components/upload/ImageUploader";
 import VideoUploader from "@/components/upload/VideoUploader";
+import DocUploader from "@/components/upload/DocUploader";
 
 export default {
   components: {
     ImageUploader,
+    DocUploader,
     VideoUploader
   },
   data() {
     return {
       type: "",
-      types: ["Image", "Video"]
+      types: ["Image", "Video", "Doc"]
     };
   }
 };
