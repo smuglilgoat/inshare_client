@@ -51,7 +51,7 @@
           <v-layout row wrap justify-space-around align-center fill-height>
             <v-flex xs10>
               <v-avatar size="40px">
-                <img :src="author.avatar">
+                <img :src="author.avatar" />
               </v-avatar>
 
               <v-tooltip top v-if="author.role === 'Etudiant'">
@@ -71,7 +71,7 @@
             <v-flex xs2 text-xs-right>{{doc.vues}} vues</v-flex>
             <v-flex xs12 class="mt-2">
               <span class="font-weight-bold">Description:</span>
-              <br>
+              <br />
               {{doc.description}}
             </v-flex>
             <v-divider dark></v-divider>
@@ -93,13 +93,8 @@
 </template>
 
 <script>
-import StarRating from "vue-star-rating";
-
 export default {
   name: "Description",
-  components: {
-    StarRating
-  },
   props: {
     doc: {},
     author: {}
