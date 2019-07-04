@@ -20,7 +20,7 @@ Vue.use(Vuetify, {
 	}
 });
 window.axios = axios;
-axios.defaults.baseURL = 'http://192.168.42.89:3333';
+axios.defaults.baseURL = 'http://127.0.0.1:3333';
 const token = localStorage.getItem('token');
 if (token) {
 	axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;

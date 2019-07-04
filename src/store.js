@@ -33,6 +33,10 @@ export default new Vuex.Store({
 			state.status = '';
 			state.token = '';
 			state.user = {};
+		},
+		updateUser(state, user) {
+			state.status = 'success';
+			state.user = user;
 		}
 	},
 	actions: {
@@ -93,6 +97,14 @@ export default new Vuex.Store({
 				localStorage.removeItem('token');
 				localStorage.removeItem('user');
 				delete axios.defaults.headers.common['Authorization'];
+				resolve();
+			});
+		},
+		updateUser({ commit }, user) {
+			return new Promise((resolve, reject) => {
+				commit('updateUser', user.user);
+				localStorage.removeItem('user');
+				localStorage.setItem('user', JSON.stringify(user));
 				resolve();
 			});
 		}

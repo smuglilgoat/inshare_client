@@ -42,7 +42,7 @@
             <v-icon>assignment</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Sujets d'examins</v-list-tile-title>
+            <v-list-tile-title>Sujets d'examens</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-divider v-if="isAdmin"></v-divider>

@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-toolbar card flat dense color="primary">
-      <v-toolbar-title>Profile</v-toolbar-title>
+      <v-toolbar-title>Profil</v-toolbar-title>
     </v-toolbar>
     <v-container fluid grid-list-md text-xs-center fill-height>
       <v-layout row wrap align-center>

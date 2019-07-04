@@ -3,7 +3,10 @@
     <v-container grid-list-xs fluid>
       <v-layout row wrap align-center justify-center>
         <v-flex xs10>
-          <v-alert value="true" type="info">Toute modification du compte entraine une deconnexion.</v-alert>
+          <v-alert
+            value="true"
+            type="info"
+          >Certaines modifications du compte entraine une deconnexion.</v-alert>
           <v-tabs centered color="primary" dark icons-and-text grow>
             <v-tabs-slider color="yellow"></v-tabs-slider>
 
@@ -15,7 +18,7 @@
             <v-tab-item key="1">
               <v-card flat>
                 <v-card-text>
-                  <Info/>
+                  <Info />
                 </v-card-text>
               </v-card>
             </v-tab-item>
@@ -26,7 +29,7 @@
             <v-tab-item key="2">
               <v-card flat>
                 <v-card-text>
-                  <Password/>
+                  <Password />
                 </v-card-text>
               </v-card>
             </v-tab-item>
@@ -37,7 +40,7 @@
             <v-tab-item key="3">
               <v-card flat>
                 <v-card-text>
-                  <Avatar/>
+                  <Avatar />
                 </v-card-text>
               </v-card>
             </v-tab-item>

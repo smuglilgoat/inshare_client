@@ -22,7 +22,7 @@
         <v-btn color="primary" @click="updatePassword">Enregistrer</v-btn>
       </v-flex>
     </v-form>
-    <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
+    <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2" />
   </div>
 </template>
 
@@ -63,10 +63,12 @@ export default {
             }
           }
         )
-        .then(() => {
+        .then(resp => {
           this.password = "";
           this.newpassword = "";
-          this.$store.dispatch("logout").then(() => this.$router.push("/"));
+          this.$store
+            .dispatch("updateUser", { user: resp.data.user })
+            .then(() => this.$router.push("/"));
         })
         .catch(error => {
           this.password = "";

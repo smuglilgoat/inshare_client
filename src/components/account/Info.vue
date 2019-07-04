@@ -12,15 +12,15 @@
       <v-flex text-xs-right>
         <v-btn color="primary" @click="updateUsername">Enregistrer</v-btn>
       </v-flex>
-      <br>
+      <br />
       <v-divider></v-divider>
-      <br>Entrez votre nouveau mail
+      <br />Entrez votre nouveau mail
       <v-text-field name="email" label="Email" id="email" prepend-icon="email" v-model="user.email"></v-text-field>
       <v-flex text-xs-right>
         <v-btn color="primary" @click="updateEmail">Enregistrer</v-btn>
       </v-flex>
     </v-form>
-    <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2"/>
+    <Alert :type="alert.type" :message="alert.message" v-if="alert.message" class="mt-2" />
   </div>
 </template>
 
@@ -62,10 +62,12 @@ export default {
             }
           }
         )
-        .then(() => {
+        .then(resp => {
           this.user.username = "";
           this.user.email = "";
-          this.$store.dispatch("logout").then(() => this.$router.push("/"));
+          this.$store
+            .dispatch("updateUser", { user: resp.data.user })
+            .then(() => this.$router.push("/"));
         })
         .catch(error => {
           this.user.username = "";
@@ -93,10 +95,12 @@ export default {
             }
           }
         )
-        .then(() => {
+        .then(resp => {
           this.user.username = "";
           this.user.email = "";
-          this.$store.dispatch("logout").then(() => this.$router.push("/"));
+          this.$store
+            .dispatch("updateUser", { user: resp.data.user })
+            .then(() => this.$router.push("/"));
         })
         .catch(error => {
           this.user.username = "";
