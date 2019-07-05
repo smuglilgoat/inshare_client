@@ -94,7 +94,7 @@
       >
         <v-btn icon large flat slot="activator">
           <v-avatar size="30px">
-            <img :src="userAvatar">
+            <img :src="userAvatar" />
           </v-avatar>
         </v-btn>
         <v-list class="pa-0">
@@ -143,6 +143,15 @@
       <v-container fluid>
         <router-view></router-view>
       </v-container>
+      <v-footer app fixed>
+        <v-layout justify-center row wrap>
+          <v-flex text-xs-center xs12>
+            &copy;2019 —
+            <strong>inShare</strong> —
+            <router-link to="/contact">Contact</router-link>
+          </v-flex>
+        </v-layout>
+      </v-footer>
     </v-content>
   </v-app>
 </template>
