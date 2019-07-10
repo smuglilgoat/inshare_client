@@ -4,7 +4,7 @@
       <v-layout align-center justify-center text-xs-center>
         <v-flex xs12>
           <img src="../assets/book-reader-solid.png" alt="Logo in Share" />
-          <h1>Bienvenu sur inShare !</h1>
+          <h1>Bienvenue sur inShare !</h1>
           <h4>La plateforme de partage de documents universitaires</h4>
         </v-flex>
       </v-layout>
@@ -12,7 +12,7 @@
     <v-container fluid fill-height>
       <v-layout align-center justify-center text-xs-center>
         <v-flex xs12>
-          <span v-if="user.username">Bienvenu à vous {{user.username}}</span>
+          <span v-if="user.username">Bienvenue à vous {{user.username}}</span>
           <span v-else>
             Vous êtes entrain de parcourir le site entant que
             <i>Visiteur</i>.

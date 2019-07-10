@@ -20,7 +20,7 @@ Vue.use(Vuetify, {
 	}
 });
 window.axios = axios;
-axios.defaults.baseURL = ' https://0ac3f822.ngrok.io';
+axios.defaults.baseURL = 'https://0c4fc97e.ngrok.io';
 const token = localStorage.getItem('token');
 if (token) {
 	axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;

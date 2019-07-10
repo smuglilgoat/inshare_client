@@ -181,7 +181,6 @@ export default {
           responseType: "blob"
         })
         .then(response => {
-          console.log(response);
           const blob = new Blob([response.data], {
             type: "application/zip"
           });

@@ -1,7 +1,7 @@
 <template>
   <div class="embed-container">
     <iframe
-      :src="'https://view.officeapps.live.com/op/embed.aspx?src='+ doc.path + '&embedded=true'"
+      :src="'https://docs.google.com/viewer?url='+ doc.path + '&embedded=true'"
       frameborder="0"
     ></iframe>
   </div>
