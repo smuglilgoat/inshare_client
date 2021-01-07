@@ -1,4 +1,7 @@
-# pfe-app
+# inShare-client
+
+A community driven file sharing website.
+Client side app made with VueJs and Vuetify.
 
 ## Project setup
 ```
