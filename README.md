@@ -2,6 +2,7 @@
 
 A community driven file sharing website.
 Client side app made with VueJs and Vuetify.
+Feel free to inspire yourself.
 
 ## Project setup
 ```
